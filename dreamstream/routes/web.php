@@ -1,6 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MediaController;
+use App\Http\Controllers\MonitoringLogController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\RecommendationController;
+use App\Http\Controllers\ParentalControlController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () {return view('welcome');});
+Route::resource('users', UserController::class);
+Route::resource('media', MediaController::class);
+Route::resource('logs', MonitoringLogController::class);
+Route::resource('comments', CommentController::class);
+Route::resource('recommendations', RecommendationController::class);
+Route::resource('parental-controls', ParentalControlController::class);
