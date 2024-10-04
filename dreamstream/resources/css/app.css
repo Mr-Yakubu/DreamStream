@@ -1,0 +1,24 @@
+body {
+    font-family: 'Pacifico', cursive; /* Ensure you have imported the font */
+}
+
+.container {
+    padding: 20px;
+}
+
+.video-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.video-card {
+    background-color: #f9f9f9; /* Add some background */
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+    color: black; /* Set font color to black */
+}

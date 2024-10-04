@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
 {
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = ['title', 'description', 'url', 'uploaded_by'];
 }
+
 

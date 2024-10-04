@@ -9,44 +9,13 @@ class MediaController extends Controller
 {
     public function index()
     {
-        $media = Media::all();
+        $media = Media::all(); // Fetch all media from the database
         return view('media.index', compact('media'));
-    }
-
-    public function create()
-    {
-        return view('media.create');
-    }
-
-    public function store(Request $request)
-    {
-        Media::create($request->all());
-        return redirect()->route('media.index');
     }
 
     public function show($id)
     {
-        $media = Media::findOrFail($id);
+        $media = Media::findOrFail($id); // Fetch specific media by id
         return view('media.show', compact('media'));
-    }
-
-    public function edit($id)
-    {
-        $media = Media::findOrFail($id);
-        return view('media.edit', compact('media'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $media = Media::findOrFail($id);
-        $media->update($request->all());
-        return redirect()->route('media.index');
-    }
-
-    public function destroy($id)
-    {
-        $media = Media::findOrFail($id);
-        $media->delete();
-        return redirect()->route('media.index');
     }
 }
