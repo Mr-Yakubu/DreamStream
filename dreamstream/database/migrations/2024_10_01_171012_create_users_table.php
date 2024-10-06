@@ -6,31 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateUsersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->enum('role', ['parent', 'child'])->default('child'); // Assuming roles are parent or child
-            // Add more fields as needed based on your ERD
-            $table->rememberToken();
-            $table->timestamps();
+            $table->id(); // Primary key
+            $table->string('username')->unique();
+            $table->string('password'); // Password (hashed)
+            $table->string('email')->unique(); // Unique email
+            $table->string('user_type')->default('child'); // Role with a default value
+            $table->date('date_of_birth')->nullable(); // Date of birth (optional)
+            $table->rememberToken(); // Token for "remember me" functionality
+            $table->timestamps(); // Created and updated timestamps
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('users');

@@ -8,12 +8,15 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
+        /* Prevent horizontal scrolling */
+        html, body {
             font-family: 'Pacifico', cursive;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
+            height: 100vh;
+            overflow-x: hidden; /* Disable horizontal scrolling */
         }
         nav {
             width: 100%;
@@ -65,7 +68,7 @@
             display: flex;
             flex-direction: row;
             margin-top: 20px;
-            height: 100vh;
+            flex-grow: 1;
         }
         .sidebar {
             width: 200px;
@@ -95,38 +98,61 @@
         .video-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px; /* Reduced gap between cards */
+            gap: 10px;
             margin-left: 20px;
             padding: 20px;
             flex-grow: 1;
-            height: 100%;
-            overflow-y: auto;
+            overflow-y: auto; /* Allow vertical scrolling */
         }
         .video-card {
             border: 1px solid #ccc;
-            padding: 100px;
             background-color: white;
-            border-radius: 5px;
-            text-align: center;
-            max-width: 200px;
+            border-radius: 10px; /* Adjust border-radius */
+            max-width: 385px;
+            max-height: 250px;
+            position: relative; /* Position for overlay */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content */
+            align-items: center;
+            text-align: center; /* Center titles */
             transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
         }
         .video-card:hover {
-            background-color: #f0f0f0; /* Grey hover color */
+            background-color: #f0f0f0;
             transform: scale(1.05);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 100px; /* Reduced width */
-            height: 75px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            object-fit: cover;
+            width: 100%; /* Fill the entire width */
+            height: 500px; /* Fixed height for thumbnails */
+            object-fit: cover; /* Cover the area */
+            border-radius: 10px 10px 0 0; /* Rounded top corners */
+        }
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 24px;
+            transition: background-color 0.3s;
+        }
+        .video-card:hover .play-overlay {
+            display: block; /* Show overlay on hover */
+        }
+        .video-card p {
+            margin: 10px 0 0; /* Adjust margin for video title */
         }
         .video-card a {
             text-decoration: none;
             color: black;
-            display: block; /* Make the whole card clickable */
+            display: block;
         }
     </style>
 </head>
@@ -150,69 +176,43 @@
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
             <a href="#"><i class="fas fa-clock"></i> Latest</a>
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
 
         <div class="video-grid">
             <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 1]) }}"> <!-- Updated to include route and video ID -->
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 1</p>
+                <a href="{{ route('video.player', ['video_id' => 1]) }}">
+                    <img src="{{ asset('Images/HEHE.jpg') }}" alt="Dummy Video Thumbnail">
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
+                <p>HEHE</p>
             </div>
             <div class="video-card">
                 <a href="{{ route('video.player', ['video_id' => 2]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 2</p>
+                    <img src="{{ asset('Images/Night-Life.jpg') }}" alt="Night-Life Video Thumbnail">
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
+                <p>Night-Life</p>
             </div>
+            <!-- Manually specify more video cards as needed -->
             <div class="video-card">
                 <a href="{{ route('video.player', ['video_id' => 3]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 3</p>
+                    <img src="{{ asset('Images/ThumbnailP.jpg') }}" alt="Video Thumbnail">
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
+                <p>Your Video Title</p>
             </div>
             <div class="video-card">
                 <a href="{{ route('video.player', ['video_id' => 4]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 4</p>
+                    <img src="{{ asset('images/AnotherThumbnailPath.jpg') }}" alt="Video Thumbnail">
+                    <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 5]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 5</p>
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 6]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 6</p>
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 7]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 7</p>
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 8]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 8</p>
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 9]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 9</p>
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 10]) }}">
-                    <img src="https://via.placeholder.com/100" alt="Video Thumbnail">
-                    <p>Video 10</p>
-                </a>
+                <p>Another Video Title</p>
             </div>
         </div>
     </div>

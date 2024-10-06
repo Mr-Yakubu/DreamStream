@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Video;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
-    public function show(Request $request)
+    public function show($id)
     {
-        $video_id = $request->query('video_id');
-        
-        // Fetch video details based on the $video_id
-        // For example:
-        // $video = Video::find($video_id); // Assuming you have a Video model
+        // Retrieve the video by its ID along with the user who uploaded it
+        $video = Video::with('user')->findOrFail($id);
 
-        return view('videoplayer', compact('video_id')); // Pass video ID to the view
+        // Fetch upcoming videos (excluding the current video)
+        $upcomingVideos = Video::where('id', '!=', $video->id)
+                                ->orderBy('created_at', 'desc')
+                                ->take(5) // Get the top 5 upcoming videos
+                                ->get();
+
+        // Return the view with both the video and upcoming videos
+        return view('videoplayer', compact('video', 'upcomingVideos')); 
     }
 }
+

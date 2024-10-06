@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Video extends Model
 {
     use HasFactory;
+
+    // Assuming a video belongs to a user
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    protected $table = 'videos';
 }

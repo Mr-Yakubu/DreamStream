@@ -58,7 +58,6 @@
             border: 1px solid #ccc;
             flex-grow: 1;
         }
-
         /* Dropdown styles */
         .dropdown {
             position: relative;
@@ -129,8 +128,8 @@
             margin-right: 10px; /* Reduce space between player and upcoming section */
         }
         .video-player video {
-            width: 100%;
-            max-width: 900px; /* Increase max width for more space */
+            width: 900px; /* Fixed width */
+            height: 506px; /* Aspect ratio of 16:9 */
             border-radius: 5px; /* Rounded corners */
         }
         .video-details {
@@ -138,21 +137,21 @@
             margin-top: 15px; /* Space between video and details */
         }
         .upcoming-section {
-            width: 550px; /* Adjust width to make it more compact */
-            margin-left: 50px; /* Increase left margin to move the section more to the right */
+            width: 300px; /* Keep width for compactness */
+            margin: 0 auto; /* Center the upcoming section */
         }
         .upcoming-section h3 {
             margin: 0 0 10px; /* Space below the title */
         }
         .video-card {
             border: 1px solid #ccc;
-            padding: 50px; /* Adjust padding to fit design */
+            padding: 10px; /* Adjust padding to fit design */
             background-color: white;
             border-radius: 5px;
             text-align: center;
             margin-bottom: 10px; /* Space between video cards */
             transition: transform 0.5s, background-color 0.5s;
-            width: 60%; /* Make video cards full width of upcoming section */
+            width: 100%; /* Make video cards full width of upcoming section */
         }
         .video-card:hover {
             background-color: #f0f0f0; /* Grey hover color */
@@ -160,11 +159,26 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 50%; /* Make thumbnail full width */
-            height: 100px; /* Adjust height as necessary */
+            width: 100%; /* Make thumbnail full width */
+            height: 150px; /* Adjust height as necessary */
             border-radius: 5px;
             margin-bottom: 10px;
-            object-fit: cover;
+            object-fit: cover; /* Maintain aspect ratio of thumbnails */
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column; /* Stack the sidebar and video player */
+            }
+            .sidebar {
+                width: 100%; /* Full width on mobile */
+                margin-bottom: 20px; /* Space between sidebar and video player */
+            }
+            .upcoming-section {
+                width: 100%; /* Full width on mobile */
+                margin-left: 0; /* No left margin */
+            }
         }
     </style>
 </head>
@@ -174,22 +188,7 @@
         <div class="navbar">
             <div><a href="{{ route('home') }}">HOME</a></div> <!-- Updated link to home -->
             <div><a href="#">POPULAR</a></div>
-            
-            <!-- Dropdown for categories -->
-            <div class="dropdown">
-                <a href="#" class="dropdown-toggle">CATEGORIES</a>
-                <div class="dropdown-menu">
-                    <a href="#">Education</a>
-                    <a href="#">Entertainment</a>
-                    <a href="#">Science</a>
-                    <a href="#">Technology</a>
-                    <a href="#">Art</a>
-                    <a href="#">Documentaries</a>
-                    <a href="#">Kids</a>
-                    <a href="#">Health</a>
-                </div>
-            </div>
-            
+            <div><a href="#">CATEGORIES</a></div>
             <div><a href="#">FAVORITES</a></div>
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
@@ -203,48 +202,35 @@
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
             <a href="#"><i class="fas fa-clock"></i> Latest</a>
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
 
         <div class="video-player">
             <video controls>
-                <source src="path_to_your_video_file/{{ $video_id }}.mp4" type="video/mp4">
+                <source src="{{ asset($video->file_path) }}" type="video/mp4">
                 Your browser does not support the video tag.
+                <p>This video is currently unavailable.</p>
             </video>
             <div class="video-details">
-                <h2>Video Title Here</h2>
-                <p>Uploaded on: Date</p>
-                <p>Uploaded by: Username</p>
+                <h2>{{ $video->title }}</h2>
+                <p>Uploaded on: {{ $video->created_at->format('F j, Y') }}</p>
+                <p>Uploaded by: {{ optional($video->user)->name ?? 'Unknown User' }}</p>
             </div>
         </div>
-
+        
         <div class="upcoming-section">
             <h3>Upcoming</h3>
-            <div class="video-card">
-                <a href="#">
-                    <img src="https://via.placeholder.com/100" alt="Upcoming Video Thumbnail">
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="#">
-                    <img src="https://via.placeholder.com/100" alt="Upcoming Video Thumbnail">
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="#">
-                    <img src="https://via.placeholder.com/100" alt="Upcoming Video Thumbnail">
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="#">
-                    <img src="https://via.placeholder.com/100" alt="Upcoming Video Thumbnail">
-                </a>
-            </div>
-            <div class="video-card">
-                <a href="#">
-                    <img src="https://via.placeholder.com/100" alt="Upcoming Video Thumbnail">
-                </a>
-            </div>
+            @foreach($upcomingVideos as $upcomingVideo)
+                <div class="video-card">
+                    <a href="{{ route('video.player', $upcomingVideo->id) }}">
+                        <img src="{{ asset('Images/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }}">
+                        <p>{{ $upcomingVideo->title }}</p>
+                    </a>
+                </div>
+            @endforeach
         </div>
     </div>
 </body>
