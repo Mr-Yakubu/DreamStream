@@ -136,6 +136,18 @@
             text-align: left; /* Align details to the left */
             margin-top: 15px; /* Space between video and details */
         }
+        .favorite-button {
+            margin-top: 10px; /* Space between video details and button */
+            background-color: #f0f0f0;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .favorite-button:hover {
+            background-color: #e0e0e0;
+        }
         .upcoming-section {
             width: 300px; /* Keep width for compactness */
             margin: 0 auto; /* Center the upcoming section */
@@ -181,6 +193,26 @@
             }
         }
     </style>
+    <script>
+        function addToFavorites(videoId) {
+            fetch(`/favorites/add/${videoId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+                },
+                body: JSON.stringify({ userId: {{ auth()->user()->id }} }) // Include user ID in request
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Video added to favorites!');
+                } else {
+                    alert('Failed to add to favorites.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </head>
 <body>
     <nav>
@@ -212,22 +244,25 @@
             <video controls>
                 <source src="{{ asset($video->file_path) }}" type="video/mp4">
                 Your browser does not support the video tag.
-                <p>This video is currently unavailable.</p>
             </video>
             <div class="video-details">
                 <h2>{{ $video->title }}</h2>
                 <p>Uploaded on: {{ $video->created_at->format('F j, Y') }}</p>
                 <p>Uploaded by: {{ optional($video->user)->name ?? 'Unknown User' }}</p>
+                <p>{{ $video->description }}</p> <!-- Video description here -->
+                <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">Add to Favorites</button>
+                <i class="fas fa-heart"></i>
             </div>
         </div>
-        
+
         <div class="upcoming-section">
-            <h3>Upcoming</h3>
+            <h3>Upcoming Videos</h3>
             @foreach($upcomingVideos as $upcomingVideo)
                 <div class="video-card">
+                    <img src="{{ asset('images/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }}">
                     <a href="{{ route('video.player', $upcomingVideo->id) }}">
-                        <img src="{{ asset('Images/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }}">
-                        <p>{{ $upcomingVideo->title }}</p>
+                        <h4>{{ $upcomingVideo->title }}</h4>
+                        <p>{{ $upcomingVideo->created_at->format('F j, Y') }}</p>
                     </a>
                 </div>
             @endforeach

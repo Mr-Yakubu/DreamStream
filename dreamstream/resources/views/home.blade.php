@@ -203,10 +203,10 @@
             <!-- Manually specify more video cards as needed -->
             <div class="video-card">
                 <a href="{{ route('video.player', ['video_id' => 3]) }}">
-                    <img src="{{ asset('Images/ThumbnailP.jpg') }}" alt="Video Thumbnail">
+                    <img src="{{ asset('Images/goretzka.jpg') }}" alt="Video Thumbnail">
                     <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
-                <p>Video Title</p>
+                <p>GORETZKA!</p>
             </div>
             <div class="video-card">
                 <a href="{{ route('video.player', ['video_id' => 4]) }}">

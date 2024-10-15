@@ -25,6 +25,11 @@
             @else
                 <p>No video uploaded yet.</p>
             @endif
+            <!-- Video Upload Preview -->
+            <video id="videoPreview" controls style="display:none; width: 100%; height: auto;">
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
 
         <!-- Video Upload/Edit Form -->
@@ -50,7 +55,7 @@
                 <!-- Upload Video Section -->
                 <div class="form-group text-center mb-4">
                     <label for="video_file" class="d-block text-center">Upload Video:</label>
-                    <input type="file" id="video_file_input" name="video_file" style="display: none;" {{ isset($video) ? '' : 'required' }}>
+                    <input type="file" id="video_file_input" name="video_file" style="display: none;" {{ isset($video) ? '' : 'required' }} accept="video/*">
                     <div class="d-flex justify-content-center mt-2">
                         <button type="button" class="btn btn-file-custom" onclick="document.getElementById('video_file_input').click();">Choose File</button>
                         <button type="submit" class="btn btn-custom ms-2">{{ isset($video) ? 'Update Video' : 'Upload Video' }}</button>
@@ -102,6 +107,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('video_file_input').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const videoPreview = document.getElementById('videoPreview');
+            const videoSource = document.getElementById('videoSource');
+            const url = URL.createObjectURL(file);
+
+            videoSource.src = url;
+            videoPreview.style.display = 'block';
+            videoPreview.load();
+        }
+    });
+</script>
+
 @endsection
 
 <style>

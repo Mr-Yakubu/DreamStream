@@ -13,6 +13,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RoleSelectionController;
+use App\Http\Controllers\FavoritesController;
+
+
 
 /*
 |-------------------------------------------------------------------------- 
@@ -61,9 +64,7 @@ Route::put('/video/{id}', [VideoController::class, 'update'])->name('videos.upda
 Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('videos.destroy');
 Route::get('/video/edit/{id}', [VideoController::class, 'edit'])->name('videos.edit');
 Route::get('/edit_upload', [VideoController::class, 'editUpload'])->name('edit_upload');
-
-
-
+Route::post('/favorites/add/{videoId}', [FavoritesController::class, 'add'])->name('favorites.add');
 
 
 
