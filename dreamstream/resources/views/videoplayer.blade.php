@@ -200,7 +200,7 @@
     <div class="main-content">
         <div class="sidebar">
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
-            <a href="#"><i class="fas fa-clock"></i> Latest</a>
+            <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -43,16 +43,34 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Routes that require authentication
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
 
+// Media Routes
+Route::get('/media', [MediaController::class, 'index'])->name('media.index'); // For displaying media
+Route::get('/media/create', [MediaController::class, 'create'])->name('media.create'); // For uploading media
+
+// Admin Routes
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Admin dashboard
+
+
+// Video routes
+Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.player');
+Route::post('/video/upload', [VideoController::class, 'store'])->name('videos.store');
+Route::put('/video/{id}', [VideoController::class, 'update'])->name('videos.update');
+Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('videos.destroy');
+Route::get('/video/edit/{id}', [VideoController::class, 'edit'])->name('videos.edit');
+Route::get('/edit_upload', [VideoController::class, 'editUpload'])->name('edit_upload');
+
+
+
+
+
+
+// Comments, Recommendations, and Parental Controls
+Route::resource('comments', CommentController::class);
+Route::resource('recommendations', RecommendationController::class);
+Route::resource('parental-controls', ParentalControlController::class);
     
-    Route::resource('media', MediaController::class); // Automatically generates routes for index, create, store, show, edit, update, and destroy
-    
-    // Comments, Recommendations, and Parental Controls
-    Route::resource('comments', CommentController::class);
-    Route::resource('recommendations', RecommendationController::class);
-    Route::resource('parental-controls', ParentalControlController::class);
-    
-    Route::get('/video/{video_id}', [VideoController::class, 'show'])->name('video.player');
+Route::get('/video/{video_id}', [VideoController::class, 'show'])->name('video.player');
 });

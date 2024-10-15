@@ -1,34 +1,33 @@
 <?php
 
-namespace Database\Seeders;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-use Illuminate\Database\Seeder;
-use App\Models\Video;
-
-class VideoSeeder extends Seeder
+class CreateVideosTable extends Migration
 {
-    public function run()
+    public function up()
     {
-        // Insert the videos for users with IDs 1 and 21
-        Video::insert([
-            [
-                'title' => 'Dummy Video',
-                'description' => 'This is a description for the dummy video.',
-                'file_path' => 'Videos/dummy-video.mp4', // Correct path to the actual dummy video
-                'thumbnail' => 'path/to/your/dummy_thumbnail.jpg', // Path to the dummy video thumbnail
-                'user_id' => 1, // Use the first existing user ID
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'title' => 'Night Life',
-                'description' => 'This is a description for the video.',
-                'file_path' => 'Videos/night-life.mp4', // Correct path to the actual night-life video
-                'thumbnail' => 'path/to/your/thumbnail.jpg', 
-                'user_id' => 2, // Use the second existing user ID
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        Schema::create('videos', function (Blueprint $table) {
+            $table->id(); // Primary key
+            $table->string('title'); // Title of the video
+            $table->text('description')->nullable(); // Description
+            $table->string('url'); // URL of the video
+            $table->string('age_suitability')->nullable(); // Age suitability
+            $table->unsignedBigInteger('uploaded_by'); // User ID of the uploader
+            $table->string('thumbnail')->nullable(); // Thumbnail path
+            $table->time('duration'); // Video duration
+            $table->unsignedInteger('views')->default(0); // View count
+            $table->unsignedInteger('likes')->default(0); // Like count
+            $table->unsignedInteger('dislikes')->default(0); // Dislike count
+            $table->timestamps(); // Created and updated timestamps
+
+            $table->foreign('uploaded_by')->references('id')->on('users')->onDelete('cascade'); // Foreign key
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('videos');
     }
 }

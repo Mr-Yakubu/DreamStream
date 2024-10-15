@@ -1,76 +1,173 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        
+        /* General body and font settings */
         body {
-            font-family: 'Poppins', sans-serif; /* Apply Poppins font to all body text */
-            color: black; /* Set all text to black */
+            font-family: 'Pacifico', cursive;
+            margin: 0;
+            padding: 0;
+            color: black;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
-        .funky-title {
-            font-size: 2.5rem; /* Adjust size of the title */
-            color: black; /* Ensure the title is black */
+
+        /* Header styling */
+        header {
+            background-color: #f0f0f0;
+            padding: 10px; /* Reduced padding */
+            text-align: center;
         }
-        .nav-link {
-            font-family: 'Poppins', sans-serif; /* Apply font to sidebar links */
-            color: black; /* Set link color to black */
-            transition: background-color 0.3s; /* Smooth transition for hover effect */
+
+        /* Navbar for Home */
+        .navbar {
+            display: flex;
+            justify-content: space-between; /* Spread out the elements */
+            align-items: center; /* Center vertically */
+            background-color: #f0f0f0;
+            padding: 10px; /* Reduced padding */
+            margin: 0; /* Remove margin to eliminate space */
         }
-        .nav-link:hover {
-            background-color: #020202; /* Background color on hover */
-            color: white; /* Text color on hover */
+
+        .navbar-links {
+            display: flex;
+            justify-content: space-between; /* Evenly distribute links */
+            flex-grow: 1; /* Allow links to occupy available space */
         }
-        .nav-link.active {
-            background-color: #050505; /* Active link background color */
-            color: white; /* Active link text color */
+
+        .navbar a {
+            margin: 0 100px; /* Further reduced margin to bring links closer together */
+            font-family: 'Pacifico', cursive;
+            color: black;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
         }
-        nav {
-            padding: 20px; /* Add padding around sidebar */
+
+        .navbar a:hover {
+            color: #3f4244;
+            transform: scale(1.1);
         }
-        main {
-            padding: 20px; /* Add padding for main content */
-            background-color: #f8f9fa; /* Light background for main content */
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin-left: 300px; /* Adjust as needed */
+            flex-grow: 0; /* Prevent the search bar from growing */
+        }
+
+        .search-bar input {
+            padding: 6px; /* Reduced padding */
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            flex-grow: 1; /* Allow the input to grow */
+            margin-right: -80px; /* Reduced space between input and icon */
+            width: 350px; /* Increased width for better aesthetics */
+        }
+
+        /* Sidebar styling */
+        nav.bg-light {
+            width: 200px;
+            background-color: #f8f8f8;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Full height */
+        }
+
+        nav.bg-light ul {
+            padding: 0; /* Remove default padding */
+            list-style: none; /* Remove dots */
+        }
+
+        nav.bg-light a {
+            display: flex;
+            align-items: center;
+            padding: 15px 10px;
+            color: black;
+            text-decoration: none;
+            margin: 15px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        nav.bg-light a:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        nav.bg-light a i {
+            margin-right: 10px;
+        }
+
+        /* Main content area */
+        .main-content {
+            display: flex; /* Use flex to allow side-by-side layout */
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        /* Video grid styling */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 20px;
+            max-width: 1200px; /* Set max width for centering */
+            width: 100%; /* Full width for responsiveness */
+        }
+
+        /* Footer styling */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <header class="bg-primary text-white text-center py-3">
-        <h1 class="funky-title">DreamStream</h1>
+    <header>
+        <h1>DreamStream</h1>
     </header>
 
-    <!-- Navbar for Home -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url('/') }}">Home</a>
+    <nav class="navbar">
+        <div class="navbar-links">
+            <a href="{{ url('/') }}">HOME</a>
+            <a href="#">POPULAR</a>
+            <a href="#">CATEGORIES</a>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search...">
+            <a href="#"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+        </div>
     </nav>
 
-    <div class="d-flex">
+    <div class="main-content">
         <!-- Sidebar -->
-        <nav class="bg-light" style="min-width: 200px;">
+        <nav class="bg-light">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('media.index') }}">Media</a>
-                    <li><a href="{{ route('media.create') }}">Upload Video</a></li>
-                    <li><a href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('recommendations.index') }}">Recommendations</a>
+                <a href="#"><i class="fas fa-th-list"></i> Channels</a>
+                <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
                 </li>
             </ul>
         </nav>
 
-        <main class="container mt-4" style="flex-grow: 1;">
+        <!-- Video Grid Section -->
+        <div class="video-grid">
             @yield('content')
-        </main>
+        </div>
     </div>
 
-    <footer class="text-center py-3">
+    <footer>
         <p>Copyright &copy; 2024 DreamStream</p>
     </footer>
 

@@ -18,11 +18,6 @@ class User extends Authenticatable // Extend Authenticatable instead of Model
         'password', 'remember_token', // Hide these fields when serializing
     ];
 
-    public function media()
-    {
-        return $this->hasMany(Media::class);
-    }
-
     public function logs()
     {
         return $this->hasMany(MonitoringLog::class);

@@ -175,6 +175,7 @@
         <div class="sidebar">
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
             <a href="#"><i class="fas fa-clock"></i> Latest</a>
+            <a href="{{ route('edit_upload') }}"><i class="fas fa-video"></i> Videos</a> 
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
@@ -205,14 +206,14 @@
                     <img src="{{ asset('Images/ThumbnailP.jpg') }}" alt="Video Thumbnail">
                     <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
-                <p>Your Video Title</p>
+                <p>Video Title</p>
             </div>
             <div class="video-card">
                 <a href="{{ route('video.player', ['video_id' => 4]) }}">
                     <img src="{{ asset('images/AnotherThumbnailPath.jpg') }}" alt="Video Thumbnail">
                     <div class="play-overlay"><i class="fas fa-play"></i></div>
                 </a>
-                <p>Another Video Title</p>
+                <p>Video Title</p>
             </div>
         </div>
     </div>
