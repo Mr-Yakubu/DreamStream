@@ -14,8 +14,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RoleSelectionController;
 use App\Http\Controllers\FavoritesController;
-
-
+use App\Http\Controllers\VideoFilterController;
 
 /*
 |-------------------------------------------------------------------------- 
@@ -37,7 +36,8 @@ Route::post('/choose-role', [RegisterController::class, 'chooseRoleSubmit'])->na
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::get('home', [HomeController::class, 'index'])->name('home'); // Your home controller
+// home controller
+Route::get('home', [HomeController::class, 'index'])->name('home'); 
 Route::get('/choose-role', [RoleSelectionController::class, 'showRoleSelectionForm'])->name('choose.role');
 Route::post('/choose-role', [RoleSelectionController::class, 'chooseRole'])->name('choose.role.submit');
 
@@ -48,10 +48,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-
-// Media Routes
-Route::get('/media', [MediaController::class, 'index'])->name('media.index'); // For displaying media
-Route::get('/media/create', [MediaController::class, 'create'])->name('media.create'); // For uploading media
 
 // Admin Routes
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Admin dashboard
@@ -65,6 +61,15 @@ Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('videos.
 Route::get('/video/edit/{id}', [VideoController::class, 'edit'])->name('videos.edit');
 Route::get('/edit_upload', [VideoController::class, 'editUpload'])->name('edit_upload');
 Route::post('/favorites/add/{videoId}', [FavoritesController::class, 'add'])->name('favorites.add');
+Route::get('/favorites', [FavoritesController::class, 'index'])->name('favorites.index');
+Route::delete('/favorites/remove/{videoId}', [FavoritesController::class, 'remove'])->name('favorites.remove');
+Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
+Route::post('/videos/store', [VideoController::class, 'store'])->name('video.store');
+Route::get('/videos/store', [VideoController::class, 'store'])->name('video.store');
+
+// AI Filter
+Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
+
 
 
 

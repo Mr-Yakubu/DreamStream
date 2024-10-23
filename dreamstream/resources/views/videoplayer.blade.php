@@ -91,8 +91,8 @@
             display: flex;
             flex-direction: row;
             height: 100vh;
-            width: 100%; /* Ensure main content doesn't overflow */
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            width: 100%; 
+            box-sizing: border-box; 
         }
         .sidebar {
             width: 200px;
@@ -124,16 +124,16 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Align items to the left */
-            margin-right: 10px; /* Reduce space between player and upcoming section */
+            align-items: flex-start; 
+            margin-right: 10px; 
         }
         .video-player video {
-            width: 900px; /* Fixed width */
-            height: 506px; /* Aspect ratio of 16:9 */
+            width: 900px; 
+            height: 506px; 
             border-radius: 5px; /* Rounded corners */
         }
         .video-details {
-            text-align: left; /* Align details to the left */
+            text-align: left; 
             margin-top: 15px; /* Space between video and details */
         }
         .favorite-button {
@@ -149,21 +149,21 @@
             background-color: #e0e0e0;
         }
         .upcoming-section {
-            width: 300px; /* Keep width for compactness */
-            margin: 0 auto; /* Center the upcoming section */
+            width: 300px; 
+            margin: 0 auto; 
         }
         .upcoming-section h3 {
             margin: 0 0 10px; /* Space below the title */
         }
         .video-card {
             border: 1px solid #ccc;
-            padding: 10px; /* Adjust padding to fit design */
+            padding: 10px; 
             background-color: white;
             border-radius: 5px;
             text-align: center;
-            margin-bottom: 10px; /* Space between video cards */
+            margin-bottom: 10px; 
             transition: transform 0.5s, background-color 0.5s;
-            width: 100%; /* Make video cards full width of upcoming section */
+            width: 100%; 
         }
         .video-card:hover {
             background-color: #f0f0f0; /* Grey hover color */
@@ -171,11 +171,11 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 100%; /* Make thumbnail full width */
+            width: 100%; /
             height: 150px; /* Adjust height as necessary */
             border-radius: 5px;
             margin-bottom: 10px;
-            object-fit: cover; /* Maintain aspect ratio of thumbnails */
+            object-fit: cover; 
         }
         
         /* Responsive Design */
@@ -184,12 +184,12 @@
                 flex-direction: column; /* Stack the sidebar and video player */
             }
             .sidebar {
-                width: 100%; /* Full width on mobile */
+                width: 100%; 
                 margin-bottom: 20px; /* Space between sidebar and video player */
             }
             .upcoming-section {
-                width: 100%; /* Full width on mobile */
-                margin-left: 0; /* No left margin */
+                width: 100%; 
+                margin-left: 0; 
             }
         }
     </style>
@@ -201,7 +201,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
                 },
-                body: JSON.stringify({ userId: {{ auth()->user()->id }} }) // Include user ID in request
+                body: JSON.stringify({ userId: {{ auth()->user()->id }} }) 
             })
             .then(response => {
                 if (response.ok) {
@@ -221,7 +221,7 @@
             <div><a href="{{ route('home') }}">HOME</a></div> <!-- Updated link to home -->
             <div><a href="#">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
-            <div><a href="#">FAVORITES</a></div>
+            <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
                 <a href="#"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
@@ -249,7 +249,7 @@
                 <h2>{{ $video->title }}</h2>
                 <p>Uploaded on: {{ $video->created_at->format('F j, Y') }}</p>
                 <p>Uploaded by: {{ optional($video->user)->name ?? 'Unknown User' }}</p>
-                <p>{{ $video->description }}</p> <!-- Video description here -->
+                <p>{{ $video->description }}</p> <!-- Video description -->
                 <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">Add to Favorites</button>
                 <i class="fas fa-heart"></i>
             </div>

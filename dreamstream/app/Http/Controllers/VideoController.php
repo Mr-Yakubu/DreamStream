@@ -28,7 +28,7 @@ class VideoController extends Controller
     // Show the edit/upload video page
     public function editUpload()
     {
-        return view('edit_upload'); // Returns the edit_upload.blade.php view
+        return view('edit_upload'); 
     }
 
     public function store(Request $request)
@@ -38,7 +38,7 @@ class VideoController extends Controller
             'channel_name' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'video_file' => 'required|mimes:mp4,mov,ogg,qt|max:20000', // Add file size and format restrictions
+            'video_file' => 'required|mimes:mp4,mov,ogg,qt|max:20000', 
         ]);
     
         // Handle file upload
@@ -53,7 +53,7 @@ class VideoController extends Controller
     
             // Extract the video duration using FFmpeg
             $ffmpeg = FFMpeg::create();
-            $videoFile = $ffmpeg->open(storage_path('app/public/' . $path)); // Use storage_path() to get the full path
+            $videoFile = $ffmpeg->open(storage_path('app/public/' . $path)); 
             $durationInSeconds = $videoFile->getFormat()->get('duration'); // Extract duration in seconds
     
             // Convert duration to a human-readable format (optional)
@@ -65,9 +65,9 @@ class VideoController extends Controller
             $video->title = $request->title;
             $video->description = $request->description;
             $video->file_path = $path;
-            $video->user_id = auth()->id(); // Assign current logged-in user as the uploader
-            $video->uploaded_by = auth()->id(); // Also assign to 'uploaded_by' column
-            $video->duration = $durationFormatted; // Set the duration from FFmpeg
+            $video->user_id = auth()->id(); 
+            $video->uploaded_by = auth()->id(); 
+            $video->duration = $durationFormatted; 
     
             // Save the video and check if it was successful
             if ($video->save()) {
@@ -88,7 +88,7 @@ class VideoController extends Controller
             'channel_name' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'video_file' => 'nullable|mimes:mp4,mov,ogg,qt|max:20000', // File is optional on edit
+            'video_file' => 'nullable|mimes:mp4,mov,ogg,qt|max:20000', 
         ]);
 
         // Find the video to update
@@ -122,9 +122,11 @@ class VideoController extends Controller
         }
 
         // Save changes
-        $video->save();
-
-        return redirect()->route('home')->with('success', 'Video updated successfully!');
+        if ($video->save()) {
+            return redirect()->route('home')->with('success', 'Video uploaded successfully!');
+        } else {
+            return redirect()->back()->withErrors(['db' => 'Video could not be saved to the database.']);
+        }
     }
 
     // When editing a video
@@ -149,5 +151,41 @@ class VideoController extends Controller
         $video->delete();
 
         return redirect()->route('home')->with('success', 'Video deleted successfully!');
+    }
+
+    // Filter videos with OpenCV
+    public function filterVideos()
+    {
+        // Fetch all uploaded videos
+        $videos = Video::all();
+        $filteredVideos = [];
+
+        foreach ($videos as $video) {
+            $inputPath = storage_path("app/public/{$video->file_path}");
+            $outputPath = storage_path("app/public/filtered/{$video->title}_filtered.mp4"); // Adjust the output filename and extension
+
+            // Call the OpenCV script to filter the video
+            if ($this->processVideoWithOpenCV($inputPath, $outputPath)) {
+                $filteredVideos[] = $outputPath; // Store the output path for later use
+            }
+        }
+
+        // Return the view with filtered videos
+        return view('videos.filtered', compact('filteredVideos'));
+    }
+
+    private function processVideoWithOpenCV($inputPath, $outputPath)
+    {
+        $command = "python3 " . base_path('opencv_scripts/filter_video.py') . " $inputPath $outputPath";
+
+        // Execute the command
+        exec($command, $output, $return_var);
+
+        if ($return_var !== 0) {
+            // Handle error if needed
+            return false;
+        }
+
+        return true;
     }
 }

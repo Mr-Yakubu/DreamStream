@@ -1,4 +1,4 @@
-@extends('layouts.app') <!-- Assuming you're using a layout -->
+@extends('layouts.app') 
 
 @section('content')
 <div class="container">
@@ -7,7 +7,7 @@
     <!-- Channel Name -->
     <div class="form-group">
         <label for="channel_name">Channel Name:</label>
-        <p id="channel_name">{{ auth()->user()->username }}</p> <!-- Displaying the username -->
+        <p id="channel_name">{{ auth()->user()->username }}</p> 
     </div>
 
     <!-- Video Preview and Video Details Section -->
@@ -34,10 +34,10 @@
 
         <!-- Video Upload/Edit Form -->
         <div class="video-details" style="position: absolute; top: 50%; right: -300px; transform: translateY(-50%);">
-            <form action="{{ isset($video) ? route('videos.update', $video->id) : route('videos.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('video.store') }}" method="PUT" enctype="multipart/form-data">
                 @csrf
                 @if(isset($video))
-                    @method('PUT') <!-- For editing -->
+                    @method('PUT') 
                 @endif
 
                 <!-- Description -->
@@ -75,7 +75,7 @@
             @if(isset($myVideos) && count($myVideos) > 0)
                 @foreach($myVideos as $myVideo)
                     <div class="col-md-4 mb-4">
-                        <div class="card rounded-3"> <!-- More rounded corners -->
+                        <div class="card rounded-3"> 
                             <video class="card-img-top" controls>
                                 <source src="{{ asset('storage/' . $myVideo->file_path) }}" type="video/mp4">
                                 Your browser does not support the video tag.
@@ -83,7 +83,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ $myVideo->title }}</h5>
                                 <div class="d-flex justify-content-between">
-                                    <div class="btn-group" role="group"> <!-- Button group for compactness -->
+                                    <div class="btn-group" role="group"> 
                                         <form action="{{ route('video.player', $myVideo->id) }}" method="GET" style="display:inline;">
                                             <button type="submit" class="btn btn-custom btn-sm">View</button>
                                         </form>
@@ -128,8 +128,8 @@
 <style>
 .video-player video {
     width: 900px; /* Fixed width */
-    height: 506px; /* Aspect ratio of 16:9 */
-    border-radius: 5px; /* Rounded corners */
+    height: 506px; 
+    border-radius: 5px; 
 }
 .d-flex {
     display: flex;
@@ -137,15 +137,14 @@
 }
 .video-details {
     max-width: 150px;
-    /* Removed fixed margin, positioned absolutely */
 }
 .video-preview {
-    width: 900px; /* Same as video player for alignment */
+    width: 900px; 
 }
 .form-control {
     border-radius: 25px; /* Rounded corners for input fields */
-    border: 1px solid #ccc; /* Light gray border */
-    padding: 10px; /* Add padding for a better feel */
+    border: 1px solid #ccc; 
+    padding: 10px; 
     transition: border-color 0.3s;
 }
 .form-control:focus {
@@ -159,36 +158,36 @@
     padding: 10px 20px; /* Padding for better appearance */
     border: none; /* Remove default border */
     transition: background-color 0.3s;
-    display: inline-flex; /* Align text vertically in the middle */
+    display: inline-flex; 
     align-items: center; /* Align text vertically in the middle */
     white-space: nowrap; /* Prevent text wrapping */
 }
 .btn-custom:hover, .btn-file-custom:hover {
-    background-color: #333; /* Darker shade on hover */
+    background-color: #333; 
 }
 .btn-file-custom {
-    margin-right: 30px; /* Adjust space between buttons */
+    margin-right: 30px; 
 }
 .mb-3 {
-    margin-bottom: 1.5rem !important; /* Increase vertical space */
+    margin-bottom: 1.5rem !important; 
 }
 .mb-4 {
-    margin-bottom: 2rem !important; /* More space for Upload Video section */
+    margin-bottom: 2rem !important; 
 }
 .card {
     border-radius: 10px; /* Rounded corners for video cards */
     overflow: hidden; /* Prevents overflow of content */
 }
 .card video {
-    border-radius: 0; /* No rounded corners for video in card */
+    border-radius: 0; 
 }
 .btn-sm {
     padding: 5px 10px; /* Adjust padding for smaller buttons */
     border-radius: 50px; /* Pill-shaped corners for small buttons */
 }
 .btn-group {
-    display: flex; /* Use flexbox for grouping buttons */
-    gap: 5px; /* Add some space between buttons */
+    display: flex; 
+    gap: 5px; 
 }
 
 /* Top Navigation Bar Style */
