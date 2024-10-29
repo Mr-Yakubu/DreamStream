@@ -78,6 +78,9 @@ Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
 
 // Comments, Recommendations, and Parental Controls
 Route::resource('comments', CommentController::class);
+Route::post('/video/{video}/comment', [CommentController::class, 'store']);
+
+
 Route::resource('recommendations', RecommendationController::class);
 Route::resource('parental-controls', ParentalControlController::class);
     

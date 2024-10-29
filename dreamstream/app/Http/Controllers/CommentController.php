@@ -7,16 +7,20 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    // CRUD methods implemented here
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'content' => 'required',
-            'media_id' => 'required|exists:media,id'
-        ]);
+    public function store(Request $request, $videoId)
+{
+    $request->validate([
+        'comment' => 'required|string|max:255',
+        'userId' => 'required|integer'
+    ]);
 
-        Comment::create($request->all());
-        return redirect()->back();
-    }
+    $comment = new Comment();
+    $comment->text = $request->comment;
+    $comment->user_id = $request->userId;
+    $comment->video_id = $videoId;
+    $comment->save();
+
+    return response()->json(['comment' => $comment->text]);
+}
 }

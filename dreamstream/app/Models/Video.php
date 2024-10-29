@@ -20,4 +20,8 @@ class Video extends Model
     {
         return $this->hasMany(Favorite::class, 'video_id');
     }
+    public function comments()
+{
+    return $this->hasMany(Comment::class);
+}
 }
