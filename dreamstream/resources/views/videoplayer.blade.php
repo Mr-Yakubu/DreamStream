@@ -58,34 +58,6 @@
             border: 1px solid #ccc;
             flex-grow: 1;
         }
-        /* Dropdown styles */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropdown-toggle {
-            text-decoration: none;
-            color: black;
-            padding: 10px;
-            font-family: 'Pacifico', cursive;
-        }
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-            min-width: 160px;
-            z-index: 1;
-        }
-        .dropdown-menu a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .dropdown:hover .dropdown-menu {
-            display: block;
-        }
 
         .main-content {
             display: flex;
@@ -137,20 +109,37 @@
             margin-top: 15px; /* Space between video and details */
         }
         .favorite-button {
-            margin-top: 10px; /* Space between video details and button */
-            background-color: #f0f0f0;
+            background-color: transparent;
             border: none;
-            padding: 10px 15px;
             cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: transform 0.3s;
         }
         .favorite-button:hover {
-            background-color: #e0e0e0;
+            transform: scale(1.1);
         }
+        .likes-dislikes {
+            display: flex;
+            align-items: center;
+            margin-top: 10px; /* Space between video details and buttons */
+        }
+        .like-button, .dislike-button {
+            border: none;
+            background: none;
+            cursor: pointer;
+            margin-right: 15px;
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+        .like-button:hover, .dislike-button:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Upcoming videos section */
         .upcoming-section {
             width: 300px; 
-            margin: 0 auto; 
+            margin-left: 20px; /* Space between video player and upcoming section */
+            display: flex;
+            flex-direction: column;
         }
         .upcoming-section h3 {
             margin: 0 0 10px; /* Space below the title */
@@ -171,7 +160,7 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 100%; /
+            width: 100%;
             height: 150px; /* Adjust height as necessary */
             border-radius: 5px;
             margin-bottom: 10px;
@@ -193,26 +182,67 @@
             }
         }
     </style>
-    <script>
-        function addToFavorites(videoId) {
-            fetch(`/favorites/add/${videoId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
-                },
-                body: JSON.stringify({ userId: {{ auth()->user()->id }} }) 
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Video added to favorites!');
-                } else {
-                    alert('Failed to add to favorites.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
+<script>
+    function addToFavorites(videoId) {
+        fetch(`/favorites/add/${videoId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+            },
+            body: JSON.stringify({ userId: {{ auth()->user()->id }} }) 
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Video added to favorites!');
+            } else {
+                alert('Failed to add to favorites.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function likeVideo(videoId) {
+        fetch(`/video/${videoId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function dislikeVideo(videoId) {
+        fetch(`/video/${videoId}/dislike`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    // Function to disable like and dislike buttons
+    function disableButtons(videoId, action) {
+        document.querySelector(`.like-button`).disabled = action === 'like';
+        document.querySelector(`.dislike-button`).disabled = action === 'dislike';
+    }
+
+    // Call the sendViewCount function when the video loads
+    window.onload = function() {
+        sendViewCount({{ $video->id }});
+    }
+</script>
+
 </head>
 <body>
     <nav>
@@ -247,11 +277,22 @@
             </video>
             <div class="video-details">
                 <h2>{{ $video->title }}</h2>
-                <p>Uploaded on: {{ $video->created_at->format('F j, Y') }}</p>
                 <p>Uploaded by: {{ optional($video->user)->name ?? 'Unknown User' }}</p>
-                <p>{{ $video->description }}</p> <!-- Video description -->
-                <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">Add to Favorites</button>
-                <i class="fas fa-heart"></i>
+                <p>Uploaded on: {{ $video->created_at->format('d M Y') }}</p>
+                <p>{{ $video->description }}</p>
+                <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">
+                    <i class="fas fa-heart"></i> FAVORITE
+                </button>
+                <div class="likes-dislikes">
+                    <button class="like-button" onclick="likeVideo({{ $video->id }})">
+                        <i class="fas fa-thumbs-up"></i>
+                    </button>
+                    <span id="likes-count-{{ $video->id }}">{{ $video->likes }}</span>
+                    <button class="dislike-button" onclick="dislikeVideo({{ $video->id }})">
+                        <i class="fas fa-thumbs-down"></i>
+                    </button>
+                    <span id="dislikes-count-{{ $video->id }}">{{ $video->dislikes }}</span>
+                </div>
             </div>
         </div>
 

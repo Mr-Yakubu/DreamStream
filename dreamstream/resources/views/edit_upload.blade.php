@@ -34,7 +34,7 @@
 
         <!-- Video Upload/Edit Form -->
         <div class="video-details" style="position: absolute; top: 50%; right: -300px; transform: translateY(-50%);">
-            <form action="{{ route('video.store') }}" method="PUT" enctype="multipart/form-data">
+            <form action="{{ route('video.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @if(isset($video))
                     @method('PUT') 

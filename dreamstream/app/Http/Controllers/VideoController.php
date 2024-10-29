@@ -31,6 +31,30 @@ class VideoController extends Controller
         return view('edit_upload'); 
     }
 
+    public function likeVideo($id)
+    {
+        $video = Video::findOrFail($id); 
+        $video->likes++;
+        $video->save(); 
+
+        return response()->json(['likes' => $video->likes]); 
+    }
+
+    public function dislikeVideo($id)
+    {
+        $video = Video::findOrFail($id); 
+        $video->dislikes++; 
+        $video->save();
+
+        return response()->json(['dislikes' => $video->dislikes]); 
+    }
+
+    public function incrementViewCount($id) {
+        $video = Video::find($id);
+        $video->increment('views'); 
+        return response()->json(['success' => true]);
+    }
+
     public function store(Request $request)
     {
         // Validate the video details
@@ -44,7 +68,7 @@ class VideoController extends Controller
         // Handle file upload
         if ($request->hasFile('video_file')) {
             $file = $request->file('video_file');
-            $path = $file->store('videos', 'public'); // Store video in 'videos' directory in 'public' disk
+            $path = $file->store('Videos', 'public'); // Store video in 'Videos' directory in 'public' disk
     
             // Check if path is not empty
             if (!$path) {
@@ -68,6 +92,7 @@ class VideoController extends Controller
             $video->user_id = auth()->id(); 
             $video->uploaded_by = auth()->id(); 
             $video->duration = $durationFormatted; 
+            $video->save();
     
             // Save the video and check if it was successful
             if ($video->save()) {
@@ -108,7 +133,7 @@ class VideoController extends Controller
 
             // Upload the new file
             $file = $request->file('video_file');
-            $path = $file->store('videos', 'public');
+            $path = $file->store('Videos', 'public'); // Store video in 'Videos' directory
 
             // Extract the video duration using FFmpeg for the new file
             $ffmpeg = FFMpeg::create();
@@ -123,7 +148,7 @@ class VideoController extends Controller
 
         // Save changes
         if ($video->save()) {
-            return redirect()->route('home')->with('success', 'Video uploaded successfully!');
+            return redirect()->route('home')->with('success', 'Video updated successfully!');
         } else {
             return redirect()->back()->withErrors(['db' => 'Video could not be saved to the database.']);
         }

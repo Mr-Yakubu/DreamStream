@@ -63,8 +63,11 @@ Route::get('/edit_upload', [VideoController::class, 'editUpload'])->name('edit_u
 Route::post('/favorites/add/{videoId}', [FavoritesController::class, 'add'])->name('favorites.add');
 Route::get('/favorites', [FavoritesController::class, 'index'])->name('favorites.index');
 Route::delete('/favorites/remove/{videoId}', [FavoritesController::class, 'remove'])->name('favorites.remove');
+Route::post('/video/{video}/like', [VideoController::class, 'likeVideo']);
+Route::post('/video/{video}/dislike', [VideoController::class, 'dislikeVideo']);
+Route::post('/video/{id}/view', 'VideoController@incrementViewCount')->name('video.view');
 Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
-Route::post('/videos/store', [VideoController::class, 'store'])->name('video.store');
+Route::post('/videos/store', [VideoController::class, 'store'])->name('videos.store');
 Route::get('/videos/store', [VideoController::class, 'store'])->name('video.store');
 
 // AI Filter
