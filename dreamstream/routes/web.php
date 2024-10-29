@@ -65,7 +65,7 @@ Route::get('/favorites', [FavoritesController::class, 'index'])->name('favorites
 Route::delete('/favorites/remove/{videoId}', [FavoritesController::class, 'remove'])->name('favorites.remove');
 Route::post('/video/{video}/like', [VideoController::class, 'likeVideo']);
 Route::post('/video/{video}/dislike', [VideoController::class, 'dislikeVideo']);
-Route::post('/video/{id}/view', 'VideoController@incrementViewCount')->name('video.view');
+Route::post('/video/{id}/view', [VideoController::class, 'incrementViewCount']);
 Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
 Route::post('/videos/store', [VideoController::class, 'store'])->name('videos.store');
 Route::get('/videos/store', [VideoController::class, 'store'])->name('video.store');

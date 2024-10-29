@@ -137,7 +137,7 @@
         /* Upcoming videos section */
         .upcoming-section {
             width: 300px; 
-            margin-left: 20px; /* Space between video player and upcoming section */
+            margin-right: 185px; /* Space between video player and upcoming section */
             display: flex;
             flex-direction: column;
         }
@@ -146,7 +146,7 @@
         }
         .video-card {
             border: 1px solid #ccc;
-            padding: 10px; 
+            padding: 35px; 
             background-color: white;
             border-radius: 5px;
             text-align: center;
@@ -207,7 +207,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
             }
         })
         .then(response => response.json())
@@ -222,7 +222,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
             }
         })
         .then(response => response.json())
@@ -231,6 +231,25 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
+    function sendViewCount(videoId) {
+    fetch(`/video/${videoId}/view`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            console.error('Failed to increment view count. Response status:', response.status);
+        } else {
+            console.log("View count incremented successfully");
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
     // Function to disable like and dislike buttons
     function disableButtons(videoId, action) {
         document.querySelector(`.like-button`).disabled = action === 'like';
@@ -280,17 +299,14 @@
                 <p>Uploaded by: {{ optional($video->user)->name ?? 'Unknown User' }}</p>
                 <p>Uploaded on: {{ $video->created_at->format('d M Y') }}</p>
                 <p>{{ $video->description }}</p>
-                <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">
-                    <i class="fas fa-heart"></i> FAVORITE
-                </button>
-                <div class="likes-dislikes">
-                    <button class="like-button" onclick="likeVideo({{ $video->id }})">
-                        <i class="fas fa-thumbs-up"></i>
+                <p>Views: {{ $video->views }}</p>
+                <div class="button-container">
+                    <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">
+                        <i class="fas fa-heart"></i>
                     </button>
+                    <button class="like-button" onclick="likeVideo({{ $video->id }})"><i class="fas fa-thumbs-up"></i></button>
                     <span id="likes-count-{{ $video->id }}">{{ $video->likes }}</span>
-                    <button class="dislike-button" onclick="dislikeVideo({{ $video->id }})">
-                        <i class="fas fa-thumbs-down"></i>
-                    </button>
+                    <button class="dislike-button" onclick="dislikeVideo({{ $video->id }})"><i class="fas fa-thumbs-down"></i></button>
                     <span id="dislikes-count-{{ $video->id }}">{{ $video->dislikes }}</span>
                 </div>
             </div>

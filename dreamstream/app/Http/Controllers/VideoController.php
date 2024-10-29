@@ -49,11 +49,26 @@ class VideoController extends Controller
         return response()->json(['dislikes' => $video->dislikes]); 
     }
 
-    public function incrementViewCount($id) {
-        $video = Video::find($id);
-        $video->increment('views'); 
-        return response()->json(['success' => true]);
+    public function incrementViewCount($id)
+{
+    $userId = auth()->user()->id;
+
+    // Initialize a 'viewed_videos' session array if it doesn't exist
+    if (!session()->has("viewed_videos.{$userId}")) {
+        session(["viewed_videos.{$userId}" => []]);
     }
+    // Retrieve the array of videos the user has viewed in this session
+    $viewedVideos = session("viewed_videos.{$userId}");
+    // Only increment if the video ID is not in the user's viewed session array
+    if (!in_array($id, $viewedVideos)) {
+        $video = Video::find($id);
+        $video->increment('views');
+
+        session()->push("viewed_videos.{$userId}", $id);
+    }
+    return response()->json(['success' => true]);
+}
+
 
     public function store(Request $request)
     {
