@@ -268,12 +268,12 @@
         <h1>DreamStream</h1>
         <div class="navbar">
             <div><a href="{{ route('home') }}">HOME</a></div> <!-- Updated link to home -->
-            <div><a href="#">POPULAR</a></div>
+            <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
-                <a href="#"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
     </nav>
@@ -282,7 +282,7 @@
         <div class="sidebar">
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
             <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
@@ -296,7 +296,7 @@
             </video>
             <div class="video-details">
                 <h2>{{ $video->title }}</h2>
-                <p>Uploaded by: {{ optional($video->user)->name ?? 'Unknown User' }}</p>
+                <p>Uploaded by: {{ optional($video->user)->name ?? 'Uknown User' }}</p>
                 <p>Uploaded on: {{ $video->created_at->format('d M Y') }}</p>
                 <p>{{ $video->description }}</p>
                 <p>Views: {{ $video->views }}</p>

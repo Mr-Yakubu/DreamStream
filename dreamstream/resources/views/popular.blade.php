@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - DreamStream</title>
+    <title>Popular - DreamStream</title>
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Prevent horizontal scrolling */
-        html, body {
+    /* Prevent horizontal scrolling */
+    html, body {
             font-family: 'Pacifico', cursive;
             margin: 0;
             padding: 0;
@@ -102,15 +103,15 @@
             margin-left: 20px;
             padding: 20px;
             flex-grow: 1;
-            overflow-y: auto; /
+            overflow-y: auto; /* Allow vertical scrolling */
         }
         .video-card {
             border: 1px solid #ccc;
             background-color: white;
-            border-radius: 10px; 
+            border-radius: 10px; /* Adjust border-radius */
             max-width: 385px;
             max-height: 250px;
-            position: relative; 
+            position: relative; /* Position for overlay */
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -160,13 +161,13 @@
     <nav>
         <h1>DreamStream</h1>
         <div class="navbar">
-            <div><a href="#">PROFILE</a></div>
+            <div><a href="{{ route('home') }}">HOME</a></div>
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
-                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}s"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
     </nav>
@@ -176,7 +177,7 @@
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
             <a href="#"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('edit_upload') }}"><i class="fas fa-video"></i> Videos</a> 
-            <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -186,30 +187,15 @@
         </div>
 
         <div class="video-grid">
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 1]) }}">
-                    <img src="{{ asset('Images/HEHE.jpg') }}" alt="Dummy Video Thumbnail">
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                </a>
-                <p>HEHE</p>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 2]) }}">
-                    <img src="{{ asset('Images/Night-Life.jpg') }}" alt="Night-Life Video Thumbnail">
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                </a>
-                <p>Night-Life</p>
-            </div>
-
-            
-            <!-- Manually specify more video cards as needed -->
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 3]) }}">
-                    <img src="{{ asset('Images/goretzka.jpg') }}" alt="Video Thumbnail">
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                </a>
-                <p>GORETZKA!</p>
-            </div>
+            @foreach($popularVideos as $video)
+                <div class="video-card">
+                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
+                        <img src="{{ asset('images/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
+                        <div class="play-overlay"><i class="fas fa-play"></i></div>
+                    </a>
+                    <p>{{ $video->title }}</p>
+                </div>
+            @endforeach
         </div>
     </div>
 </body>

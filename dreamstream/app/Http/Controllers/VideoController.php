@@ -25,6 +25,22 @@ class VideoController extends Controller
         return view('videoplayer', compact('video', 'upcomingVideos')); 
     }
 
+    public function settings()
+{
+    // Fetch the videos for the logged-in user or all videos as needed
+    $videos = Video::where('user_id', auth()->id())->get(); // Adjust according to your model and relationship
+
+    return view('settings', compact('videos'));
+}
+    public function popular()
+{
+    // Fetch videos ordered by views in descending order
+    $popularVideos = Video::orderBy('views', 'desc')->get();
+
+    // Pass the videos to the view
+    return view('popular', compact('popularVideos'));
+}
+
     // Show the edit/upload video page
     public function editUpload()
     {

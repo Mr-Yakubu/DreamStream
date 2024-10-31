@@ -140,12 +140,12 @@
     <nav class="navbar">
         <div class="navbar-links">
             <a href="{{ url('/') }}">HOME</a>
-            <a href="#">POPULAR</a>
+            <a href="{{ route('popular') }}">POPULAR</a>
             <a href="#">CATEGORIES</a>
         </div>
         <div class="search-bar">
             <input type="text" placeholder="Search...">
-            <a href="#"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+            <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
         </div>
     </nav>
 
@@ -156,7 +156,7 @@
                 <li class="nav-item">
                 <a href="#"><i class="fas fa-th-list"></i> Channels</a>
                 <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
-                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
                 </li>
             </ul>
         </nav>

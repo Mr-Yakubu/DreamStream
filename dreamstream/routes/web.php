@@ -15,6 +15,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RoleSelectionController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\VideoFilterController;
+use App\Http\Controllers\SettingsController;
+
 
 /*
 |-------------------------------------------------------------------------- 
@@ -52,6 +54,11 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 // Admin Routes
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Admin dashboard
 
+// Settings Routes
+Route::get('/user/account/info', [UserController::class, 'getAccountInfo'])->name('user.account.info');
+Route::post('/user/update/username', [UserController::class, 'updateUsername'])->name('user.update.username');
+
+Route::get('/user/upload/history', [UserController::class, 'getUploadHistory'])->name('user.upload.history');
 
 // Video routes
 Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.player');
@@ -69,6 +76,8 @@ Route::post('/video/{id}/view', [VideoController::class, 'incrementViewCount']);
 Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
 Route::post('/videos/store', [VideoController::class, 'store'])->name('videos.store');
 Route::get('/videos/store', [VideoController::class, 'store'])->name('video.store');
+Route::get('/popular', [VideoController::class, 'popular'])->name('popular');
+
 
 // AI Filter
 Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
@@ -80,6 +89,9 @@ Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
 Route::resource('comments', CommentController::class);
 Route::post('/video/{video}/comment', [CommentController::class, 'store']);
 
+// Settings
+
+Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
 
 Route::resource('recommendations', RecommendationController::class);
 Route::resource('parental-controls', ParentalControlController::class);

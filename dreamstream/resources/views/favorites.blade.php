@@ -177,12 +177,12 @@
         <h1>DreamStream</h1>
         <div class="navbar">
             <div><a href="{{ route('home') }}">HOME</a></div>
-            <div><a href="#">POPULAR</a></div>
+            <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
                 <input type="text" placeholder="Search...">
-                <a href="#"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
     </nav>
@@ -192,7 +192,7 @@
             <a href="#"><i class="fas fa-th-list"></i> Channels</a>
             <a href="#"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('edit_upload') }}"><i class="fas fa-video"></i> Videos</a> 
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
