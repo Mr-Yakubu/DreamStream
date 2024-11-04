@@ -177,7 +177,10 @@
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
+                <form action="{{ route('search') }}" method="GET">
+                    <input type="text" name="query" placeholder="Search..." required>
+                    <button type="submit" style="display: none;"></button>
+                </form>
                 <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
@@ -186,10 +189,10 @@
     <div class="main-content">
         <!-- Sidebar -->
         <div class="sidebar">
-            <a href="#"><i class="fas fa-th-list"></i> Channels</a>
-            <a href="#"><i class="fas fa-clock"></i> Latest</a>
+            <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
+            <a href="{{ route('home') }}"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

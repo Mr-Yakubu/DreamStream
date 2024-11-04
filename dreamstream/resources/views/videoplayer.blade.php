@@ -148,7 +148,7 @@
             border: 1px solid #ccc;
             padding: 35px; 
             background-color: white;
-            border-radius: 5px;
+            border-radius: 20px;
             text-align: center;
             margin-bottom: 10px; 
             transition: transform 0.5s, background-color 0.5s;
@@ -272,7 +272,10 @@
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
+                <form action="{{ route('search') }}" method="GET">
+                    <input type="text" name="query" placeholder="Search..." required>
+                    <button type="submit" style="display: none;"></button>
+                </form>
                 <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
@@ -280,7 +283,7 @@
 
     <div class="main-content">
         <div class="sidebar">
-            <a href="#"><i class="fas fa-th-list"></i> Channels</a>
+            <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
             <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>
@@ -296,9 +299,9 @@
             </video>
             <div class="video-details">
                 <h2>{{ $video->title }}</h2>
-                <p>Uploaded by: {{ optional($video->user)->name ?? 'Uknown User' }}</p>
+                <p>Uploaded by: {{ optional($video->name)->username ?? 'Unknown User' }}</p>
                 <p>Uploaded on: {{ $video->created_at->format('d M Y') }}</p>
-                <p>{{ $video->description }}</p>
+                <p>Description: {{ $video->description }}</p>
                 <p>Views: {{ $video->views }}</p>
                 <div class="button-container">
                     <button class="favorite-button" onclick="addToFavorites({{ $video->id }})">
@@ -316,7 +319,7 @@
             <h3>Upcoming Videos</h3>
             @foreach($upcomingVideos as $upcomingVideo)
                 <div class="video-card">
-                    <img src="{{ asset('images/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }}">
+                    <img src="{{ asset('Images/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }}">
                     <a href="{{ route('video.player', $upcomingVideo->id) }}">
                         <h4>{{ $upcomingVideo->title }}</h4>
                         <p>{{ $upcomingVideo->created_at->format('F j, Y') }}</p>

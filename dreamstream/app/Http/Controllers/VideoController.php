@@ -13,7 +13,7 @@ class VideoController extends Controller
     public function show($id)
     {
         // Retrieve the video by its ID along with the user who uploaded it
-        $video = Video::with('user')->findOrFail($id);
+        $video = Video::with('user')->find($id);
 
         // Fetch upcoming videos (excluding the current video)
         $upcomingVideos = Video::where('id', '!=', $video->id)
@@ -24,6 +24,18 @@ class VideoController extends Controller
         // Return the view with both the video and upcoming videos
         return view('videoplayer', compact('video', 'upcomingVideos')); 
     }
+
+    public function search(Request $request)
+{
+    // Validate the search query to ensure it’s not empty or malicious
+    $query = $request->input('query');
+
+    // Search for videos where the title contains the query
+    $videos = Video::where('title', 'LIKE', '%' . $query . '%')->get();
+
+    // Pass the search results to the view
+    return view('search_results', compact('videos', 'query'));
+}
 
     public function settings()
 {
@@ -41,10 +53,22 @@ class VideoController extends Controller
     return view('popular', compact('popularVideos'));
 }
 
+
+private function generateThumbnail($videoPath)
+{
+    $thumbnailPath = 'thumbnails/' . pathinfo($videoPath, PATHINFO_FILENAME) . '.jpg'; // Define the thumbnail path
+
+    // Execute FFmpeg command to create a thumbnail
+    $ffmpegCommand = "ffmpeg -i " . storage_path('app/' . $videoPath) . " -ss 00:00:01.000 -vframes 1 " . storage_path('app/' . $thumbnailPath);
+    exec($ffmpegCommand);
+
+    return $thumbnailPath; // Return the path to the generated thumbnail
+}
+
     // Show the edit/upload video page
     public function editUpload()
     {
-        return view('edit_upload'); 
+        return view('videos'); 
     }
 
     public function likeVideo($id)
@@ -119,7 +143,7 @@ class VideoController extends Controller
             $video->channel_name = $request->channel_name;
             $video->title = $request->title;
             $video->description = $request->description;
-            $video->file_path = $path;
+            $video->url = $path;
             $video->user_id = auth()->id(); 
             $video->uploaded_by = auth()->id(); 
             $video->duration = $durationFormatted; 

@@ -3,21 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popular - DreamStream</title>
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+    <title>Search Results - DreamStream</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-    /* Prevent horizontal scrolling */
-    html, body {
+        html, body {
             font-family: 'Pacifico', cursive;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow-x: hidden; /* Disable horizontal scrolling */
+            overflow-x: hidden;
         }
         nav {
             width: 100%;
@@ -67,57 +65,35 @@
         }
         .main-content {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            align-items: center;
             margin-top: 20px;
             flex-grow: 1;
         }
-        .sidebar {
-            width: 200px;
-            background-color: #f8f8f8;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            padding: 15px 10px;
-            color: black;
-            text-decoration: none;
-            margin: 15px 0;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        .sidebar a:hover {
-            background-color: #e0e0e0;
-            transform: scale(1.05);
-        }
-        .sidebar a i {
-            margin-right: 10px;
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
         }
         .video-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            margin-left: 20px;
             padding: 20px;
-            flex-grow: 1;
-            overflow-y: auto; /* Allow vertical scrolling */
+            width: 80%;
         }
         .video-card {
             border: 1px solid #ccc;
             background-color: white;
-            border-radius: 20px; /* Adjust border-radius */
+            border-radius: 10px;
             max-width: 385px;
             max-height: 250px;
-            position: relative; /* Position for overlay */
+            position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center content */
+            justify-content: center;
             align-items: center;
-            text-align: center; /* Center titles */
+            text-align: center;
             transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
         }
         .video-card:hover {
@@ -126,17 +102,17 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 100%; /* Fill the entire width */
-            height: 500px; /* Fixed height for thumbnails */
-            object-fit: cover; /* Cover the area */
-            border-radius: 10px 10px 0 0; /* Rounded top corners */
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
         }
         .play-overlay {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
+            display: none;
             background-color: rgba(0, 0, 0, 0.7);
             color: white;
             padding: 10px;
@@ -145,10 +121,10 @@
             transition: background-color 0.3s;
         }
         .video-card:hover .play-overlay {
-            display: block; /* Show overlay on hover */
+            display: block;
         }
         .video-card p {
-            margin: 10px 0 0; /* Adjust margin for video title */
+            margin: 10px 0 0;
         }
         .video-card a {
             text-decoration: none;
@@ -170,35 +146,27 @@
                     <input type="text" name="query" placeholder="Search..." required>
                     <button type="submit" style="display: none;"></button>
                 </form>
-                <a href="{{ route('settings') }}s"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
     </nav>
 
+    <h2>Search Results for "{{ $query }}"</h2>
     <div class="main-content">
-        <div class="sidebar">
-            <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
-            <a href="{{ route('home') }}"><i class="fas fa-clock"></i> Latest</a>
-            <a href="{{ route('edit_upload') }}"><i class="fas fa-video"></i> Videos</a> 
-            <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
-
         <div class="video-grid">
-            @foreach($popularVideos as $video)
-                <div class="video-card">
-                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
-                        <img src="{{ asset('images/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
-                        <div class="play-overlay"><i class="fas fa-play"></i></div>
-                    </a>
-                    <p>{{ $video->title }}</p>
-                </div>
-            @endforeach
+            @if($videos->isEmpty())
+                <p>No results found.</p>
+            @else
+                @foreach($videos as $video)
+                    <div class="video-card">
+                        <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
+                            <img src="{{ $video->thumbnail_path }}" alt="{{ $video->title }}">
+                            <div class="play-overlay"><i class="fas fa-play"></i></div>
+                            <p>{{ $video->title }}</p>
+                        </a>
+                    </div>
+                @endforeach
+            @endif
         </div>
     </div>
 </body>

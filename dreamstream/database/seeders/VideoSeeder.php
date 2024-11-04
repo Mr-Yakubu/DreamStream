@@ -12,13 +12,13 @@ class VideoSeeder extends Seeder
         
         Video::insert([
             [
-                'title' => 'HEHE NOT HEHE',
-                'description' => 'This is what I mean!',
-                'file_path' => 'Videos/dummy-video.mov',
-                'thumbnail' => 'Images/HEHE.jpg',
-                'url' => 'http://127.0.0.1:8000/videos/dummy-video.mov',
+                'title' => 'Santa Sketch',
+                'description' => 'That Time Of The Year',
+                'file_path' => 'Videos/SantaSketch.mp4',
+                'thumbnail' => 'Images/thumbnail.jpg',
+                'url' => 'http://127.0.0.1:8000/videos/SantaSketch.mp4',
                 'uploaded_by' => 1,
-                'duration' => '00:00:30',
+                'duration' => '00:00:08',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

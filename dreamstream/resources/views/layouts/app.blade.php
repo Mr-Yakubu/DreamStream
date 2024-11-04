@@ -144,7 +144,10 @@
             <a href="#">CATEGORIES</a>
         </div>
         <div class="search-bar">
-            <input type="text" placeholder="Search...">
+            <form action="{{ route('search') }}" method="GET">
+                <input type="text" name="query" placeholder="Search..." required>
+                <button type="submit" style="display: none;"></button>
+            </form>
             <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
         </div>
     </nav>
@@ -154,7 +157,7 @@
         <nav class="bg-light">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                <a href="#"><i class="fas fa-th-list"></i> Channels</a>
+                <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
                 <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
                 <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
                 </li>

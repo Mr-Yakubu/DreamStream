@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Popular - DreamStream</title>
+    <title>Channels - DreamStream</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-    /* Prevent horizontal scrolling */
-    html, body {
+        /* Reusing existing styles for theme consistency */
+        html, body {
             font-family: 'Pacifico', cursive;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow-x: hidden; /* Disable horizontal scrolling */
+            overflow-x: hidden;
         }
         nav {
             width: 100%;
@@ -131,22 +131,6 @@
             object-fit: cover; /* Cover the area */
             border-radius: 10px 10px 0 0; /* Rounded top corners */
         }
-        .play-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 24px;
-            transition: background-color 0.3s;
-        }
-        .video-card:hover .play-overlay {
-            display: block; /* Show overlay on hover */
-        }
         .video-card p {
             margin: 10px 0 0; /* Adjust margin for video title */
         }
@@ -168,17 +152,16 @@
             <div class="search-bar">
                 <form action="{{ route('search') }}" method="GET">
                     <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="display: none;"></button>
+                    <button type="submit" style="display: none;"></button> 
                 </form>
-                <a href="{{ route('settings') }}s"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
-            </div>
+                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+            </div>            
         </div>
     </nav>
 
     <div class="main-content">
         <div class="sidebar">
-            <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
-            <a href="{{ route('home') }}"><i class="fas fa-clock"></i> Latest</a>
+            <a href="#"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('edit_upload') }}"><i class="fas fa-video"></i> Videos</a> 
             <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -190,13 +173,11 @@
         </div>
 
         <div class="video-grid">
-            @foreach($popularVideos as $video)
+            @foreach($channels as $channel)
                 <div class="video-card">
-                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
-                        <img src="{{ asset('images/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
-                        <div class="play-overlay"><i class="fas fa-play"></i></div>
-                    </a>
-                    <p>{{ $video->title }}</p>
+                    <a href="{{ route('channel.show', ['id' => $channel->id]) }}">
+                    <p>{{ $channel->username }}</p> <!-- Display the user's name as the channel name -->
+                </a>
                 </div>
             @endforeach
         </div>

@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\RoleSelectionController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\VideoFilterController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ChannelController;
 
 
 /*
@@ -50,6 +51,10 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
+// Search Results
+Route::get('/search', [VideoController::class, 'search'])->name('search');
+Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.show');
+
 
 // Admin Routes
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Admin dashboard
@@ -57,6 +62,9 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 // Settings Routes
 Route::get('/user/account/info', [UserController::class, 'getAccountInfo'])->name('user.account.info');
 Route::post('/user/update/username', [UserController::class, 'updateUsername'])->name('user.update.username');
+
+
+
 
 Route::get('/user/upload/history', [UserController::class, 'getUploadHistory'])->name('user.upload.history');
 
@@ -78,6 +86,10 @@ Route::post('/videos/store', [VideoController::class, 'store'])->name('videos.st
 Route::get('/videos/store', [VideoController::class, 'store'])->name('video.store');
 Route::get('/popular', [VideoController::class, 'popular'])->name('popular');
 
+// Channels
+
+Route::get('/channels', [ChannelController::class, 'showChannels'])->name('channels');
+Route::get('/channels/{id}', [ChannelController::class, 'show'])->name('channel.show');
 
 // AI Filter
 Route::get('/filter-videos', [VideoController::class, 'filterVideos']);

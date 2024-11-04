@@ -107,7 +107,7 @@
         .video-card {
             border: 1px solid #ccc;
             background-color: white;
-            border-radius: 10px; 
+            border-radius: 20px; 
             max-width: 385px;
             max-height: 250px;
             position: relative; 
@@ -160,12 +160,15 @@
     <nav>
         <h1>DreamStream</h1>
         <div class="navbar">
-            <div><a href="#">PROFILE</a></div>
+            <div><a href="{{ route('settings') }}">PROFILE</a></div>
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
-                <input type="text" placeholder="Search...">
+                <form action="{{ route('search') }}" method="GET">
+                    <input type="text" name="query" placeholder="Search..." required>
+                    <button type="submit" style="display: none;"></button>
+                </form>
                 <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
             </div>
         </div>
@@ -173,11 +176,11 @@
 
     <div class="main-content">
         <div class="sidebar">
-            <a href="#"><i class="fas fa-th-list"></i> Channels</a>
-            <a href="#"><i class="fas fa-clock"></i> Latest</a>
+            <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
+            <a href="{{ route('home') }}"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('edit_upload') }}"><i class="fas fa-video"></i> Videos</a> 
             <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -186,31 +189,16 @@
         </div>
 
         <div class="video-grid">
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 1]) }}">
-                    <img src="{{ asset('Images/HEHE.jpg') }}" alt="Dummy Video Thumbnail">
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                </a>
-                <p>HEHE</p>
-            </div>
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 2]) }}">
-                    <img src="{{ asset('Images/Night-Life.jpg') }}" alt="Night-Life Video Thumbnail">
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                </a>
-                <p>Night-Life</p>
-            </div>
-
-            
-            <!-- Manually specify more video cards as needed -->
-            <div class="video-card">
-                <a href="{{ route('video.player', ['video_id' => 3]) }}">
-                    <img src="{{ asset('Images/goretzka.jpg') }}" alt="Video Thumbnail">
-                    <div class="play-overlay"><i class="fas fa-play"></i></div>
-                </a>
-                <p>GORETZKA!</p>
-            </div>
-        </div>
+            @foreach ($videos as $video)
+                <div class="video-card">
+                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
+                        <img src="{{ asset('thumbnails/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
+                        <div class="play-overlay"><i class="fas fa-play"></i></div>
+                    </a>
+                    <p>{{ $video->title }}</p>
+                </div>
+            @endforeach
+        </div>        
     </div>
 </body>
 </html>

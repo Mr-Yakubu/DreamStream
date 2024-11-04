@@ -10,8 +10,6 @@ class DatabaseSeeder extends Seeder
     {
         // Call the VideoSeeder to insert sample videos
         $this->call(VideoSeeder::class);
-        // Call to insert users 
-        $this->call(UserSeeder::class);
     }
     
 }

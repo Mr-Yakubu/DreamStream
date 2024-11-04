@@ -4,7 +4,7 @@
 <div class="container">
     <h2>Upload or Edit Video</h2>
 
-    <!-- Channel Name -->
+    <!-- Channel Name Display -->
     <div class="form-group">
         <label for="channel_name">Channel Name:</label>
         <p id="channel_name">{{ auth()->user()->username }}</p> 
@@ -12,7 +12,7 @@
 
     <!-- Video Preview and Video Details Section -->
     <div class="d-flex" style="position: relative;">
-        <!-- Video Preview -->
+        
         <div class="video-preview">
             <h4>Video Preview</h4>
             @if (isset($video)) <!-- If editing an existing video -->
@@ -23,7 +23,7 @@
                     </video>
                 </div>
             @else
-                <p>No video uploaded yet.</p>
+                <p></p>
             @endif
             <!-- Video Upload Preview -->
             <video id="videoPreview" controls style="display:none; width: 100%; height: auto;">
@@ -122,7 +122,6 @@
         }
     });
 </script>
-
 @endsection
 
 <style>
@@ -153,10 +152,10 @@
 }
 .btn-custom, .btn-file-custom {
     background-color: black; /* Black background */
-    color: white; /* White text */
+    color: white; 
     border-radius: 50px; /* Pill-shaped corners */
-    padding: 10px 20px; /* Padding for better appearance */
-    border: none; /* Remove default border */
+    padding: 10px 20px; 
+    border: none; 
     transition: background-color 0.3s;
     display: inline-flex; 
     align-items: center; /* Align text vertically in the middle */

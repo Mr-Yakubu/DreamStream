@@ -163,12 +163,6 @@
                 </div>
             @endif
 
-            <!-- Social Login Section -->
-            <div class="social-login">
-                <a href="#"><i class="fab fa-google"></i></a> <!-- Google Login Icon -->
-                <a href="#"><i class="fab fa-facebook-f"></i></a> <!-- Facebook Login Icon -->
-            </div>
-
             <!-- Forgot Password Link -->
             <a href="#" class="forgot-password">Forgot Password?</a>
         </div>

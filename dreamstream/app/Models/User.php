@@ -11,12 +11,17 @@ class User extends Authenticatable // Extend Authenticatable instead of Model
     use Notifiable; // Use Notifiable trait for notifications
 
     protected $fillable = [
-        'name', 'email', 'password', // Make these fields mass assignable
+        'username', 'name', 'email', 'password', // Make these fields mass assignable
     ];
 
     protected $hidden = [
         'password', 'remember_token', // Hide these fields when serializing
     ];
+
+    public function videos()
+    {
+        return $this->hasMany(Video::class, 'uploaded_by'); // Reference the uploaded_by column
+    }
 
     public function logs()
     {
