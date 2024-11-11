@@ -19,6 +19,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChannelController;
 
 
+
 /*
 |-------------------------------------------------------------------------- 
 | Web Routes
@@ -50,6 +51,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Routes that require authentication
 Route::middleware(['auth'])->group(function () {
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/parental-controls', [ParentalControlController::class, 'index'])->name('parental_controls.index');
 
 // Search Results
 Route::get('/search', [VideoController::class, 'search'])->name('search');
@@ -63,14 +65,13 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 Route::get('/user/account/info', [UserController::class, 'getAccountInfo'])->name('user.account.info');
 Route::post('/user/update/username', [UserController::class, 'updateUsername'])->name('user.update.username');
 
-
-
+// Upload History
 
 Route::get('/user/upload/history', [UserController::class, 'getUploadHistory'])->name('user.upload.history');
 
 // Video routes
 Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.player');
-Route::post('/video/upload', [VideoController::class, 'store'])->name('videos.store');
+
 Route::put('/video/{id}', [VideoController::class, 'update'])->name('videos.update');
 Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('videos.destroy');
 Route::get('/video/edit/{id}', [VideoController::class, 'edit'])->name('videos.edit');
@@ -82,19 +83,53 @@ Route::post('/video/{video}/like', [VideoController::class, 'likeVideo']);
 Route::post('/video/{video}/dislike', [VideoController::class, 'dislikeVideo']);
 Route::post('/video/{id}/view', [VideoController::class, 'incrementViewCount']);
 Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
-Route::post('/videos/store', [VideoController::class, 'store'])->name('videos.store');
-Route::get('/videos/store', [VideoController::class, 'store'])->name('video.store');
+
+// Videos - Store
+Route::post('/videos', [VideoController::class, 'store'])->name('video.store');
+
+
+// Videos Popular
 Route::get('/popular', [VideoController::class, 'popular'])->name('popular');
 
 // Channels
-
 Route::get('/channels', [ChannelController::class, 'showChannels'])->name('channels');
 Route::get('/channels/{id}', [ChannelController::class, 'show'])->name('channel.show');
 
 // AI Filter
 Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
 
+// Parental Controls
 
+
+Route::get('parental-controls/{childUserId}', [ParentalControlController::class, 'show'])->name('parental_controls.show');
+
+
+Route::put('/parental-controls/{childUserId}/update', [ParentalControlController::class, 'update'])->name('parental_controls.update');
+Route::get('/parent-dashboard', [ParentalControlController::class, 'index'])->name('parent_dashboard');
+
+
+// Route to show parent dashboard with child accounts
+Route::get('/parent-dashboard', [ParentalControlController::class, 'parentDashboard'])
+    ->middleware('auth')
+    ->name('parent_dashboard');
+
+// Route to show parental controls for a specific child
+Route::get('/parental-controls/{childUserId}', [ParentalControlController::class, 'show'])
+    ->name('parental_controls.show');
+
+// Route to update parental controls for a specific child
+Route::put('/parental-controls/{childUserId}', [ParentalControlController::class, 'update'])
+    ->name('parental_controls.update');
+
+
+// Route to show the list of children accounts (for a parent) to select which one to manage
+Route::get('/parental-controls', [ParentalControlController::class, 'index'])
+    ->middleware('ensureUserIsParent') // Ensure the user is a parent before accessing this page
+    ->name('parental_controls.index');
+
+    Route::get('/parental-controls/{childUserId}', [ParentalControlController::class, 'show'])
+    ->middleware('ensureUserIsParent')
+    ->name('parental_controls.show');
 
 
 // Comments, Recommendations, and Parental Controls

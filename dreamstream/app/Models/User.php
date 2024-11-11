@@ -18,6 +18,23 @@ class User extends Authenticatable // Extend Authenticatable instead of Model
         'password', 'remember_token', // Hide these fields when serializing
     ];
 
+    public function parent()
+{
+    return $this->belongsTo(User::class, 'parent_id');  // A child belongs to a parent
+}
+
+// For child to parent relationship
+public function parentControl()
+{
+    return $this->hasOne(ParentalControl::class, 'child_user_id');
+}
+
+
+public function children()
+{
+    return $this->hasMany(ParentalControl::class, 'parent_id');  // A parent can have multiple children
+}
+
     public function videos()
     {
         return $this->hasMany(Video::class, 'uploaded_by'); // Reference the uploaded_by column

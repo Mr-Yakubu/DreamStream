@@ -6,7 +6,7 @@
 
     <!-- Channel Name Display -->
     <div class="form-group">
-        <label for="channel_name">Channel Name:</label>
+        <strong>Username:</strong> 
         <p id="channel_name">{{ auth()->user()->username }}</p> 
     </div>
 

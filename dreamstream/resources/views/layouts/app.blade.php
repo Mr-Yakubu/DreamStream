@@ -157,13 +157,19 @@
         <nav class="bg-light">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
-                <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
-                <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
+                    <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
+                    <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="{{ route('parental_controls.show', ['childUserId' => $child->id]) }}"><i class="fas fa-shield-alt"></i> Parental Controls</a>
+
+                    <!-- Parental Controls link, visible only for users with the 'parent' role -->
+                    @if(auth()->check() && auth()->user()->role == 'parent')
+                        <a href="{{ route('parental_controls.show') }}"><i class="fas fa-shield-alt"></i> Parental Controls</a>
+                    @endif
                 </li>
             </ul>
         </nav>
-
+    
         <!-- Video Grid Section -->
         <div class="video-grid">
             @yield('content')

@@ -23,8 +23,8 @@ class RegisterController extends Controller
         // Generate a default username based on the email
         $defaultUsername = $this->generateDefaultUsername($request->email);
 
-        // Create a new user
-        $user = $this->create($request->all(), $defaultUsername);
+        // Create a new user and check if parent email exists
+        $user = $this->create($request->all(), $defaultUsername, $request->parent_email);
 
         // Log the user in
         auth()->login($user);
@@ -45,19 +45,35 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'], // Validate password
             'user_type' => ['required', 'string', 'in:parent,child'], // Validate user type
             'date_of_birth' => ['nullable', 'date'], // Validate date of birth
+            'parent_email' => ['nullable', 'email', 'exists:users,email'], // Validate parent email (if provided)
         ]);
     }
 
-    protected function create(array $data, $defaultUsername)
+    protected function create(array $data, $defaultUsername, $parentEmail = null)
     {
         // Create a new user and hash the password
-        return User::create([
+        $user = User::create([
             'username' => $data['username'] ?: $defaultUsername, // Use the provided username or the default
             'email' => $data['email'], // Save email
             'password' => Hash::make($data['password']), // Hash the password
             'user_type' => $data['user_type'], // Save user type
             'date_of_birth' => $data['date_of_birth'], // Save date of birth
         ]);
+
+        // If the user is a child and parent_email is provided, assign the parent_id
+        if ($data['user_type'] === 'child' && $parentEmail) {
+            $parent = User::where('email', $parentEmail)->first();
+
+            // Ensure the parent is valid and has the 'parent' user type
+            if ($parent && $parent->user_type === 'parent') {
+                $user->parent_id = $parent->id;
+                $user->save();
+            } else {
+                throw new \Exception('Invalid parent email provided.');
+            }
+        }
+
+        return $user;
     }
 
     private function generateDefaultUsername($email)

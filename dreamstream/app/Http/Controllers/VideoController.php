@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use FFMpeg\FFMpeg;
 
@@ -109,6 +110,20 @@ private function generateThumbnail($videoPath)
     return response()->json(['success' => true]);
 }
 
+public function fetchChildWatchedVideos()
+{
+    // Assuming child account is linked with parent's ID or some relationship
+    $videos = Video::whereIn('id', function ($query) {
+        $query->select('video_id')
+              ->from('watch_history')
+              ->where('user_id', Auth::id()); // Filter by user's child ID
+    })
+    ->where('dislikes', '>', 5) // Example filter based on dislikes threshold
+    ->get();
+
+    return view('child_watched_videos', compact('videos'));
+}
+
 
     public function store(Request $request)
     {
@@ -123,7 +138,7 @@ private function generateThumbnail($videoPath)
         // Handle file upload
         if ($request->hasFile('video_file')) {
             $file = $request->file('video_file');
-            $path = $file->store('Videos', 'public'); // Store video in 'Videos' directory in 'public' disk
+            $path = $file->store('videos', 'public'); // Store video in 'Videos' directory in 'public' disk
     
             // Check if path is not empty
             if (!$path) {
@@ -188,7 +203,7 @@ private function generateThumbnail($videoPath)
 
             // Upload the new file
             $file = $request->file('video_file');
-            $path = $file->store('Videos', 'public'); // Store video in 'Videos' directory
+            $path = $file->store('videos', 'public'); // Store video in 'Videos' directory
 
             // Extract the video duration using FFmpeg for the new file
             $ffmpeg = FFMpeg::create();
