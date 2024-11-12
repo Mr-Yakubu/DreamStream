@@ -1,7 +1,6 @@
 body {
-    font-family: 'Pacifico', cursive; /* Ensure you have imported the font */
+    font-family: 'Rubik', sans-serif; /* or 'Lora', serif; or 'Playfair Display', serif */
 }
-
 .container {
     padding: 20px;
 }

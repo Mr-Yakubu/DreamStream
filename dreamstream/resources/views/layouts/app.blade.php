@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title')</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* General body and font settings */
         body {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
             margin: 0;
             padding: 0;
             color: black;
@@ -25,6 +27,25 @@
             background-color: #f0f0f0;
             padding: 10px; /* Reduced padding */
             text-align: center;
+        }
+
+        /* Header title styling */
+        header h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #b8b8b8; /* Green gradient color */
+            background: linear-gradient(45deg, #000000, #000000); /* Gradient effect */
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
+            animation: slideInLogo 2s ease-out;
+        }
+
+        /* Slide-in animation for header logo */
+            @keyframes slideInLogo {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         /* Navbar for Home */
@@ -45,7 +66,7 @@
 
         .navbar a {
             margin: 0 100px; /* Further reduced margin to bring links closer together */
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
             color: black;
             text-decoration: none;
             transition: color 0.3s, transform 0.3s;
@@ -64,6 +85,7 @@
         }
 
         .search-bar input {
+            font-family: 'Nunito', sans-serif;
             padding: 6px; /* Reduced padding */
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -72,14 +94,21 @@
             width: 350px; /* Increased width for better aesthetics */
         }
 
-        /* Sidebar styling */
+
+        @keyframes slideIn {
+         from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+        }
+
+/* Sidebar styling with slide-in animation */
         nav.bg-light {
             width: 200px;
             background-color: #f8f8f8;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            height: 100%; /* Full height */
+            height: 100%;
+            animation: slideIn 0.5s ease-out; /* Apply the sliding animation */
         }
 
         nav.bg-light ul {
@@ -107,11 +136,16 @@
             margin-right: 10px;
         }
 
+
         /* Main content area */
         .main-content {
             display: flex; /* Use flex to allow side-by-side layout */
             flex-grow: 1;
             padding: 20px;
+        }
+
+        .video-details{
+            font-family: 'Nunito', sans-serif; 
         }
 
         /* Video grid styling */
@@ -126,6 +160,7 @@
 
         /* Footer styling */
         footer {
+            font-family: 'Pacifico', cursive;
             text-align: center;
             padding: 10px;
             background-color: #f0f0f0;
@@ -160,12 +195,6 @@
                     <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
                     <a href="{{ url('/') }}"><i class="fas fa-clock"></i> Latest</a>
                     <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="{{ route('parental_controls.show', ['childUserId' => $child->id]) }}"><i class="fas fa-shield-alt"></i> Parental Controls</a>
-
-                    <!-- Parental Controls link, visible only for users with the 'parent' role -->
-                    @if(auth()->check() && auth()->user()->role == 'parent')
-                        <a href="{{ route('parental_controls.show') }}"><i class="fas fa-shield-alt"></i> Parental Controls</a>
-                    @endif
                 </li>
             </ul>
         </nav>

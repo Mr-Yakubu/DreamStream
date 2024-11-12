@@ -88,6 +88,7 @@ Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])-
 Route::post('/videos', [VideoController::class, 'store'])->name('video.store');
 
 
+
 // Videos Popular
 Route::get('/popular', [VideoController::class, 'popular'])->name('popular');
 
@@ -102,6 +103,8 @@ Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
 
 
 Route::get('parental-controls/{childUserId}', [ParentalControlController::class, 'show'])->name('parental_controls.show');
+Route::get('parental-controls/{childUserId}', [ParentalControlController::class, 'showParentalControls'])->name('parental_controls.show');
+ 
 
 
 Route::put('/parental-controls/{childUserId}/update', [ParentalControlController::class, 'update'])->name('parental_controls.update');

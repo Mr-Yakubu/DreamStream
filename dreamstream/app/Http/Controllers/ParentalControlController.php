@@ -27,7 +27,10 @@ class ParentalControlController extends Controller
     // Pass children to the view
     return view('parent_dashboard', compact('children'));
 }
-
+    public function showParentalControls($childUserId)
+    {
+    return view('parental_controls.show', compact('childUserId'));
+    }
     
 
     // Display the parental control settings for a specific child

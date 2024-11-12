@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player - DreamStream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -22,6 +23,23 @@
             padding: 20px;
             text-align: center;
         }
+        nav h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #b8b8b8; /* Green gradient color */
+            background: linear-gradient(45deg, #000000, #000000); /* Gradient effect */
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
+            animation: slideInLogo 2s ease-out;
+        }
+
+        @keyframes slideInLogo {
+        from { transform: translateY(-100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+        }   
+
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -36,7 +54,8 @@
         }
         .navbar a {
             margin: 0 20px;
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
             color: black;
             text-decoration: none;
             transition: color 0.3s, transform 0.3s;
@@ -52,11 +71,11 @@
             flex-grow: 1;
             margin-right: 20px;
         }
-        .search-bar input {
+        .search-bar input[type="text"] {
             padding: 8px;
-            border-radius: 5px;
             border: 1px solid #ccc;
-            flex-grow: 1;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
         }
 
         .main-content {
@@ -66,14 +85,23 @@
             width: 100%; 
             box-sizing: border-box; 
         }
+        @keyframes slideIn {
+        from { transform: translateX(-100%); }
+        to { transform: translateX(0); }
+        }
+        
+
         .sidebar {
+            font-weight: 700;
             width: 200px;
             background-color: #f8f8f8;
             padding: 20px;
             display: flex;
             flex-direction: column;
             height: 100%;
+            animation: slideIn 0.5s ease-out;
         }
+
         .sidebar a {
             display: flex;
             align-items: center;
@@ -84,10 +112,12 @@
             border-radius: 5px;
             transition: background-color 0.3s, transform 0.3s;
         }
+
         .sidebar a:hover {
             background-color: #e0e0e0;
             transform: scale(1.05);
         }
+
         .sidebar a i {
             margin-right: 10px;
         }
@@ -143,6 +173,7 @@
         }
         .upcoming-section h3 {
             margin: 0 0 10px; /* Space below the title */
+            font-weight: 700;
         }
         .video-card {
             border: 1px solid #ccc;
@@ -182,101 +213,114 @@
             }
         }
     </style>
-<script>
-    function addToFavorites(videoId) {
-        fetch(`/favorites/add/${videoId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include CSRF token for Laravel
-            },
-            body: JSON.stringify({ userId: {{ auth()->user()->id }} }) 
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('Video added to favorites!');
-            } else {
-                alert('Failed to add to favorites.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    function likeVideo(videoId) {
-        fetch(`/video/${videoId}/like`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    function dislikeVideo(videoId) {
-        fetch(`/video/${videoId}/dislike`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-    function sendViewCount(videoId) {
-    fetch(`/video/${videoId}/view`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    
+    <script>
+        function addToFavorites(videoId) {
+            fetch(`/favorites/add/${videoId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ userId: {{ auth()->user()->id }} }) 
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Video added to favorites!');
+                } else {
+                    alert('Failed to add to favorites.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
-    })
-    .then(response => {
-        if (!response.ok) {
-            console.error('Failed to increment view count. Response status:', response.status);
-        } else {
-            console.log("View count incremented successfully");
+    
+        function likeVideo(videoId) {
+            disableButtons(videoId, 'like');
+            fetch(`/video/${videoId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
+            })
+            .catch(error => console.error('Error:', error));
         }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-    // Function to disable like and dislike buttons
-    function disableButtons(videoId, action) {
-        document.querySelector(`.like-button`).disabled = action === 'like';
-        document.querySelector(`.dislike-button`).disabled = action === 'dislike';
-    }
-
-    // Call the sendViewCount function when the video loads
-    window.onload = function() {
-        sendViewCount({{ $video->id }});
-    }
-</script>
+    
+        function dislikeVideo(videoId) {
+            disableButtons(videoId, 'dislike');
+            fetch(`/video/${videoId}/dislike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        function sendViewCount(videoId) {
+            fetch(`/video/${videoId}/view`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    console.error('Failed to increment view count. Response status:', response.status);
+                } else {
+                    console.log("View count incremented successfully");
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    
+        // Function to disable like and dislike buttons
+        function disableButtons(videoId, action) {
+            if (action === 'like') {
+                document.querySelector(`.like-button`).disabled = true;
+            } else if (action === 'dislike') {
+                document.querySelector(`.dislike-button`).disabled = true;
+            }
+        }
+    
+        // Call the sendViewCount function when the video loads
+        window.onload = function() {
+            sendViewCount({{ $video->id }});
+        }
+    </script>
+    
+    
+    
 
 </head>
 <body>
     <nav>
         <h1>DreamStream</h1>
         <div class="navbar">
-            <div><a href="{{ route('home') }}">HOME</a></div> <!-- Updated link to home -->
+            <div><a href="{{ route('home') }}">HOME</a></div>
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
+            <div><a href="{{ route ('favorites.index') }}">FAVORITES</a></div>
             <div><a href="#">CATEGORIES</a></div>
-            <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
                     <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="display: none;"></button>
+                    <button type="submit" style="background: none; border: none;">
+                        <i class="fas fa-search" style="color: black;"></i>
+                    </button>
                 </form>
-                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}">
+                    <img src="profile-icon.png" alt="Profile" class="profile-icon" width="30">
+                </a>
             </div>
         </div>
     </nav>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - DreamStream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -37,11 +38,13 @@
 
         .login-form h1 {
             margin-bottom: 20px; /* Add space below the heading */
+            font-family: 'Pacifico', cursive;
         }
 
         .login-form form {
             display: inline-block; /* Center the form */
             text-align: left; /* Align text to the left for labels and inputs */
+            font-family: 'Nunito', sans-serif;
         }
 
         .login-form div {
@@ -51,9 +54,11 @@
         .login-form label {
             display: block; /* Ensure labels are block elements */
             margin-bottom: 5px; /* Add space below labels */
+            font-weight: 700;
         }
 
         .login-form input {
+            font-family: 'Nunito', sans-serif;
             padding: 10px;
             width: 250px; /* Set a fixed width for inputs */
             border-radius: 5px;
@@ -61,6 +66,7 @@
         }
 
         .login-form button {
+            font-family: 'Nunito', sans-serif;
             margin-top: 10px;
             padding: 10px 20px;
             border: none;
@@ -72,18 +78,7 @@
         }
 
         .login-form button:hover {
-            background-color: #000000;
-        }
-
-        .social-login {
-            margin-top: 20px; /* Space above social login section */
-        }
-
-        .social-login a {
-            margin: 0 10px; /* Space between icons */
-            text-decoration: none; /* Remove underline */
-            color: #333; /* Default color for icons */
-            font-size: 24px; /* Adjust icon size */
+            background-color: #444;
         }
 
         .forgot-password {
@@ -92,6 +87,8 @@
             text-align: center; /* Center the link */
             color: black; /* Change link color to black */
             text-decoration: none; /* Remove underline */
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
         }
 
         .forgot-password:hover {
@@ -148,7 +145,7 @@
                     <div>
                         <label for="role">Select Role:</label>
                         <select name="role" id="role" required>
-                            <option value="parent">Parent</option>
+                            <option value="parent">Content Creator</option>
                             <option value="child">Child</option>
                         </select>
                     </div>

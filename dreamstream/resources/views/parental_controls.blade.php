@@ -5,21 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parental Controls - DreamStream</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         /* Add your custom styling here for consistency with DreamStream's theme */
         body {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
         }
         h1 {
-            color: #333;
+            color: #000000;
+            font-weight: 700;
         }
         form {
             width: 100%;
@@ -41,12 +42,14 @@
             margin-bottom: 5px;
         }
         input, textarea {
+            font-family: 'Nunito', sans-serif;
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
         button {
+            font-family: 'Nunito', sans-serif;
             background-color: #333;
             color: white;
             padding: 10px 20px;

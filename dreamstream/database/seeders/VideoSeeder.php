@@ -59,7 +59,7 @@ class VideoSeeder extends Seeder
                 'file_path' => 'Videos/dummy-video.mp4',
                 'thumbnail' => 'Images/thumbnail.jpg',
                 'url' => 'http://127.0.0.1:8000/videos/dummy-video.mp4',
-                'uploaded_by' => 1,
+                'uploaded_by' => 4,
                 'duration' => '00:00:11',
                 'created_at' => now(),
                 'updated_at' => now(),

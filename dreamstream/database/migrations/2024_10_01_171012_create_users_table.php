@@ -15,8 +15,15 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique(); // Unique email
             $table->string('user_type')->default('child'); // Role with a default value
             $table->date('date_of_birth')->nullable(); // Date of birth (optional)
+            $table->unsignedBigInteger('parent_id')->nullable(); // Foreign key referencing the same table
             $table->rememberToken(); // Token for "remember me" functionality
             $table->timestamps(); // Created and updated timestamps
+        
+            // Define the foreign key constraint for parent_id
+            $table->foreign('parent_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('set null');
         });
     }
 

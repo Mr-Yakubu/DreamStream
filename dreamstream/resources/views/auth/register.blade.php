@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - DreamStream</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* Prevent horizontal scrolling */
         html, body {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
             margin: 0;
             padding: 0;
             height: 100vh; /* Full height */
@@ -38,6 +39,7 @@
         .login-form h1 {
             margin-bottom: 20px; /* Add space below the heading */
             text-align: center; /* Center the heading text */
+            font-family: 'Pacifico', cursive;
         }
 
         .login-form form {
@@ -52,9 +54,11 @@
         .login-form label {
             display: block; /* Ensure labels are block elements */
             margin-bottom: 5px; /* Add space below labels */
+            font-weight: 700;
         }
 
         .login-form input, .login-form select { /* Include select in input styling */
+            font-family: 'Nunito', sans-serif;
             padding: 10px;
             width: 250px; /* Set a fixed width for inputs and selects */
             border-radius: 5px;
@@ -62,6 +66,7 @@
         }
 
         .login-form button {
+            font-family: 'Nunito', sans-serif;
             margin-top: 10px;
             padding: 10px 20px;
             border: none;
@@ -76,23 +81,13 @@
             background-color: #444; /* Slightly change color on hover for better visibility */
         }
 
-        .social-login {
-            margin-top: 20px; /* Space above social login section */
-        }
-
-        .social-login a {
-            margin: 0 10px; /* Space between icons */
-            text-decoration: none; /* Remove underline */
-            color: #333; /* Default color for icons */
-            font-size: 24px; /* Adjust icon size */
-        }
-
         .forgot-password {
             margin-top: 15px; /* Space above forgot password link */
             display: block; /* Make it block to occupy full width */
             text-align: center; /* Center the link */
             color: black; /* Change link color to black */
             text-decoration: none; /* Remove underline */
+            font-weight: 700;
         }
 
         .forgot-password:hover {
@@ -131,7 +126,7 @@
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Enter your username"> <!-- Username Input -->
                     <div class="username-info">
-                        *Leave blank for a username based on your email.
+                        *Leave blank for a username based on your email.*
                     </div>
                 </div>
                 <div>

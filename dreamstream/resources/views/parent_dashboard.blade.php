@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent Dashboard - DreamStream</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Nunito', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,8 +18,9 @@
             background-color: #f9f9f9;
         }
         h1 {
-            color: #333;
+            color: #000000;
             margin-bottom: 20px;
+            font-weight: 700;
         }
         .child-list {
             width: 100%;
@@ -27,9 +28,10 @@
             background-color: #fff;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 8px rgb(0, 0, 0);
         }
         .child-item {
+            color: #000000;
             display: flex;
             justify-content: space-between;
             align-items: center;
