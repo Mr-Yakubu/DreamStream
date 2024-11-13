@@ -17,6 +17,11 @@ class ParentalControl extends Model
         'time_limits',
     ];
 
+    public function child()
+    {
+        return $this->belongsTo(User::class, 'child_user_id'); // Assuming child_user_id is the foreign key for child
+    }
+
     // In User model
 public function parentalControl()
 {

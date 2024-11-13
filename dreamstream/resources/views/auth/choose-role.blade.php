@@ -89,6 +89,7 @@
                     <select name="role" id="role" required>
                         <option value="parent">Parent</option>
                         <option value="child">Child</option>
+                        <option value="content creator">Content Creator</option>
                     </select>
                 </div>
                 <button type="submit">Continue</button>

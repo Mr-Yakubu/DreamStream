@@ -27,23 +27,26 @@ use App\Http\Controllers\ChannelController;
 | 
 */
 
+// Redirect root URL to the login page
+Route::get('/', function () {
+    return redirect()->route('login');
+})->name('landing');
+
 // Public Routes
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
 
 // Registration Routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
-Route::get('/choose-role', [RegisterController::class, 'chooseRoleForm'])->name('choose.role');
-Route::post('/choose-role', [RegisterController::class, 'chooseRoleSubmit'])->name('choose.role.submit');
-
-// Login Routes
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-
-// home controller
-Route::get('home', [HomeController::class, 'index'])->name('home'); 
 Route::get('/choose-role', [RoleSelectionController::class, 'showRoleSelectionForm'])->name('choose.role');
-Route::post('/choose-role', [RoleSelectionController::class, 'chooseRole'])->name('choose.role.submit');
+Route::post('/choose-role', [RoleSelectionController::class, 'chooseRoleSubmit'])->name('choose.role.submit');
+
+// Protected Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
+
 
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

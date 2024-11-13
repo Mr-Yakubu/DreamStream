@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Models\User;
 
 class RoleSelectionController extends Controller
 {
@@ -20,12 +21,32 @@ class RoleSelectionController extends Controller
 
         return view('auth.choose-role'); // Show the choose role view
     }
+    
+    public function chooseRoleSubmit(Request $request)
+{
+    // Validate the selected role
+    $request->validate([
+        'user_type' => 'required|in:parent,child,content creator',
+    ]);
+
+    // Retrieve the authenticated user
+    $user = User::find(auth()->id());
+
+    if ($user) {
+        $user->user_type = $request->user_type;
+        $user->save(); // This should now work correctly
+        
+        return redirect()->route('home')->with('success', 'Role selected successfully!');
+    } else {
+        return redirect()->back()->withErrors(['user' => 'Unable to retrieve authenticated user.']);
+    }
+}
 
     public function chooseRole(Request $request)
     {
         // Validate the incoming request data
         $request->validate([
-            'role' => 'required|string|in:parent,child', // Validate selected role
+            'role' => 'required|string|in:parent,child,content creator', // Validate selected role
             'dob' => 'required|date', // Validate date of birth
         ]);
 

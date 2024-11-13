@@ -6,6 +6,7 @@
     <title>Parental Controls - DreamStream</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -19,6 +20,7 @@
             padding: 20px;
         }
         h1 {
+            font-family: 'Pacifico', sans-serif;
             color: #000000;
             font-weight: 700;
         }
@@ -28,7 +30,7 @@
             background-color: #f9f9f9;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 8px rgb(0, 0, 0);
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -43,10 +45,13 @@
         }
         input, textarea {
             font-family: 'Nunito', sans-serif;
-            width: 100%;
+            width: 100%; /* Ensure inputs and textareas take the full width */
+            max-width: 500px; /* Optional: limits input field width */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            margin-bottom: 15px; /* Adds space below each input/textarea */
+            display: block; /* Ensures block display for centering and alignment */
         }
         button {
             font-family: 'Nunito', sans-serif;

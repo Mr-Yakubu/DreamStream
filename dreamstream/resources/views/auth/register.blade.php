@@ -146,30 +146,19 @@
                     <select name="user_type" id="user_type" onchange="toggleParentEmailField()">
                         <option value="parent">Parent</option>
                         <option value="child" selected>Child</option> <!-- Set Child as default -->
+                        <option value="content creator">Content Creator</option>
                     </select> <!-- User Type Select -->
+                </div>
+                
+                <div id="parent_email_section" style="display: none;">
+                    <label for="parent_email">Parent's Email</label>
+                    <input type="email" name="parent_email" id="parent_email" placeholder="Enter parent's email">
                 </div>
                 <div>
                     <label for="date_of_birth">Date of Birth</label>
                     <input type="date" id="date_of_birth" name="date_of_birth" value="{{ old('date_of_birth') }}" required>
                 </div>
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const dateInput = document.getElementById('date_of_birth');
-                        
-                        if (dateInput) {
-                            const currentDate = dateInput.value; // Get the value from the date input (format: yyyy-mm-dd)
-                            if (currentDate) {
-                                // Split it into year, month, day
-                                const [year, month, day] = currentDate.split('-');
-                                // Reformat to mm-dd-yyyy
-                                const formattedDate = `${month}-${day}-${year}`;
-                                // Set the formatted value back to the input field
-                                dateInput.value = formattedDate;
-                            }
-                        }
-                    });
-                </script>
                 
                 <!-- Parent Email field (will only appear when "Child" is selected) -->
                 <div id="parent_email_field">
@@ -196,14 +185,18 @@
     <script>
         // Function to toggle visibility of Parent's Email field based on User Type
         function toggleParentEmailField() {
-            var userType = document.getElementById('user_type').value;
-            var parentEmailField = document.getElementById('parent_email_field');
-            if (userType === 'child') {
-                parentEmailField.style.display = 'block'; // Show the parent email field
-            } else {
-                parentEmailField.style.display = 'none'; // Hide the parent email field
-            }
-        }
+    const userType = document.getElementById("user_type").value;
+    const parentEmailSection = document.getElementById("parent_email_section");
+
+    if (userType === "child") {
+        parentEmailSection.style.display = "block";
+    } else {
+        parentEmailSection.style.display = "none";
+    }
+}
+
+// Run the function on page load to ensure the correct initial state
+document.addEventListener("DOMContentLoaded", toggleParentEmailField);
     </script>
 </body>
 </html>

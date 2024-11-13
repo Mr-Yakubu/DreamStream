@@ -248,7 +248,7 @@ nav h1 {
             <a href="{{ route('home') }}"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
             @if(Auth::user()->user_type == 'parent')
-                            <a href="{{ route('parental_controls.show', ['childUserId' => Auth::user()->id]) }}">
+                            <a href="{{ route('parent_dashboard', ['childUserId' => Auth::user()->id]) }}">
                             <i class="fas fa-shield-alt"></i> Parental Controls
                         </a>
                     @endif

@@ -6,6 +6,7 @@
     <title>Parent Dashboard - DreamStream</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -18,6 +19,7 @@
             background-color: #f9f9f9;
         }
         h1 {
+            font-family: 'Pacifico', sans-serif;
             color: #000000;
             margin-bottom: 20px;
             font-weight: 700;

@@ -11,7 +11,7 @@ class User extends Authenticatable // Extend Authenticatable instead of Model
     use Notifiable; // Use Notifiable trait for notifications
 
     protected $fillable = [
-        'username', 'name', 'email', 'password', // Make these fields mass assignable
+        'username', 'name', 'email', 'password', 'user_type', 'date', // Make these fields mass assignable
     ];
 
     protected $hidden = [

@@ -43,7 +43,7 @@ class RegisterController extends Controller
             'username' => ['nullable', 'string', 'max:255', 'unique:users'], // Validate username
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'], // Validate email
             'password' => ['required', 'string', 'min:8', 'confirmed'], // Validate password
-            'user_type' => ['required', 'string', 'in:parent,child'], // Validate user type
+            'user_type' => ['required', 'string', 'in:parent,child,content creator'], // Validate user type
             'date_of_birth' => ['nullable', 'date'], // Validate date of birth
             'parent_email' => ['nullable', 'email', 'exists:users,email'], // Validate parent email (if provided)
         ]);
@@ -51,6 +51,11 @@ class RegisterController extends Controller
 
     protected function create(array $data, $defaultUsername, $parentEmail = null)
     {
+        // Ensure user_type is provided and valid
+        if (!in_array($data['user_type'], ['parent', 'child', 'content creator'])) {
+            throw new \Exception('Invalid user type provided.');
+        }
+
         // Create a new user and hash the password
         $user = User::create([
             'username' => $data['username'] ?: $defaultUsername, // Use the provided username or the default

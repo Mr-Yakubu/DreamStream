@@ -1,5 +1,5 @@
 body {
-    font-family: 'Rubik', sans-serif; /* or 'Lora', serif; or 'Playfair Display', serif */
+    font-family: 'Nunito', sans-serif; /* or 'Lora', serif; or 'Playfair Display', serif */
 }
 .container {
     padding: 20px;
@@ -20,4 +20,8 @@ body {
 
 h1, h2 {
     color: black; /* Set font color to black */
+}
+
+h2 {
+    font-family: 'Pacifico', cursive;
 }
