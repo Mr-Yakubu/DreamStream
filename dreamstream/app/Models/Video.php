@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Video extends Model
 {
+
+    protected $fillable = ['tags', 'title', 'description', 'file_path'];
+    
     use HasFactory;
 
     // Assuming a video belongs to a user

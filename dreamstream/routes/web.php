@@ -72,8 +72,11 @@ Route::post('/user/update/username', [UserController::class, 'updateUsername'])-
 
 Route::get('/user/upload/history', [UserController::class, 'getUploadHistory'])->name('user.upload.history');
 
+// Fix video upload!!!!! 
+
 // Video routes
 Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.player');
+
 
 Route::put('/video/{id}', [VideoController::class, 'update'])->name('videos.update');
 Route::delete('/video/{id}', [VideoController::class, 'destroy'])->name('videos.destroy');
@@ -88,7 +91,12 @@ Route::post('/video/{id}/view', [VideoController::class, 'incrementViewCount']);
 Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
 
 // Videos - Store
-Route::post('/videos', [VideoController::class, 'store'])->name('video.store');
+Route::post('/videos/videos', [VideoController::class, 'store'])->name('video.store');
+// Route for handling video uploads
+Route::post('/videos/store', [VideoController::class, 'store'])->name('videos.store');
+
+
+
 
 
 

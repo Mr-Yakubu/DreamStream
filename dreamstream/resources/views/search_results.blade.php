@@ -206,7 +206,7 @@
                 @foreach($videos as $video)
                     <div class="video-card">
                         <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
-                            <img src="{{ $video->thumbnail_path }}" alt="{{ $video->title }}">
+                            <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
                             <div class="play-overlay"><i class="fas fa-play"></i></div>
                             <p>{{ $video->title }}</p>
                         </a>

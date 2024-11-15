@@ -21,6 +21,7 @@ class CreateVideosTable extends Migration
             $table->unsignedInteger('likes')->default(0); // Like count
             $table->unsignedInteger('dislikes')->default(0); // Dislike count
             $table->timestamps(); // Created and updated timestamps
+            $table->string('tags')->nullable(); // Store tags as a comma-separated string
 
             $table->foreign('uploaded_by')->references('id')->on('users')->onDelete('cascade'); // Foreign key
         });

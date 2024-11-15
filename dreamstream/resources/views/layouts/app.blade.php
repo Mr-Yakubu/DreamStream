@@ -80,24 +80,37 @@
         .search-bar {
             display: flex;
             align-items: center;
-            margin-left: 300px; /* Adjust as needed */
-            flex-grow: 0; /* Prevent the search bar from growing */
         }
 
-        .search-bar input {
-            font-family: 'Nunito', sans-serif;
-            padding: 6px; /* Reduced padding */
-            border-radius: 5px;
+        .search-bar input[type="text"] {
+            padding: 8px;
             border: 1px solid #ccc;
-            flex-grow: 1; /* Allow the input to grow */
-            margin-right: -80px; /* Reduced space between input and icon */
-            width: 350px; /* Increased width for better aesthetics */
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
         }
 
+        .search-bar button {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-left: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            background-color: white;
+        }
+
+        .search-bar button i {
+            font-size: 16px;
+            color: #333;
+        }
 
         @keyframes slideIn {
          from { transform: translateX(-100%); }
         to { transform: translateX(0); }
+        }
+
+        .profile-icon {
+            margin-left: 10px;
+            cursor: pointer;
         }
 
 /* Sidebar styling with slide-in animation */
@@ -179,12 +192,16 @@
             <a href="#">CATEGORIES</a>
         </div>
         <div class="search-bar">
-            <form action="{{ route('search') }}" method="GET">
-                <input type="text" name="query" placeholder="Search..." required>
-                <button type="submit" style="display: none;"></button>
-            </form>
-            <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
-        </div>
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
+                    <input type="text" name="query" placeholder="Search..." required>
+                    <button type="submit" style="background: none; border: none;">
+                        <i class="fas fa-search" style="color: black;"></i>
+                    </button>
+                </form>
+                <a href="{{ route('settings') }}">
+                    <img src="profile-icon.png" alt="Profile" class="profile-icon" width="30">
+                </a>
+            </div>
     </nav>
 
     <div class="main-content">

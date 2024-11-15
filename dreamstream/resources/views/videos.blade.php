@@ -44,7 +44,13 @@
                 <!-- Description -->
                 <div class="form-group mb-3">
                     <label for="description">Description:</label>
-                    <textarea class="form-control" id="description" name="description" required>{{ isset($video) ? $video->description : old('description') }}</textarea>
+                    <textarea class="form-control" id="description" name="description" required style="max-height: 150px; overflow-y: auto;">{{ isset($video) ? $video->description : old('description') }}</textarea>
+                </div>                
+
+                <!-- Tags -->
+                <div class="form-group mb-3">
+                    <label for="tags">Tags (use commas):</label>
+                    <input type="text" class="form-control" id="tags" name="tags" placeholder="e.g., educational, science, kids">
                 </div>
 
                 <!-- Title -->
@@ -68,7 +74,16 @@
             </form>
         </div>
     </div>
-
+    
+    <script>
+        document.getElementById('video_file_input').addEventListener('change', function () {
+            const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+            document.getElementById('file-name').textContent = fileName;
+        });
+    </script>
+    <!-- Display Selected File Name -->
+    <p id="file-name" class="text-muted mt-2"></p>
+    
     <!-- My Videos Section -->
     <div class="my-videos mt-5">
         <h3>My Videos</h3>
@@ -78,7 +93,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card rounded-3"> 
                             <video class="card-img-top" controls>
-                                <source src="{{ asset('storage/' . $myVideo->file_path) }}" type="video/mp4">
+                                <source src="{{ asset('videos/videos/' . $myVideo->file_path) }}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
                             <div class="card-body">
@@ -107,6 +122,18 @@
             @endif
         </div>
     </div>
+    
+    @if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 </div>
 
 @else
@@ -136,8 +163,8 @@
 
 <style>
 .video-player video {
-    width: 900px; /* Fixed width */
-    height: 506px; 
+    width: 450px; /* Smaller width */
+    height: 254px; /* Adjusted for smaller preview */
     border-radius: 5px; 
 }
 .d-flex {
@@ -148,7 +175,7 @@
     max-width: 150px;
 }
 .video-preview {
-    width: 900px; 
+    width: 550px; 
 }
 .form-control {
     border-radius: 25px; /* Rounded corners for input fields */
@@ -170,6 +197,8 @@
     display: inline-flex; 
     align-items: center; /* Align text vertically in the middle */
     white-space: nowrap; /* Prevent text wrapping */
+    width: 150px;
+    margin: 5px;
 }
 .btn-custom:hover, .btn-file-custom:hover {
     background-color: #333; 
@@ -203,10 +232,8 @@
 .navbar {
     padding: 0.5rem 1rem; /* Adjust the padding */
 }
-.navbar-nav .nav-item {
-    margin-right: 100px; /* Adjust the space between nav items */
-}
 .navbar-nav .nav-link {
-    padding: 0.5rem 0.75rem; /* Adjust link padding */
+    padding: 0.5rem 1rem; 
+    font-weight: bold; 
 }
 </style>

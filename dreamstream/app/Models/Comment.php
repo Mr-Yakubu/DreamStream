@@ -10,9 +10,4 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = ['content', 'media_id'];
-
-    public function media()
-    {
-        return $this->belongsTo(Media::class);
-    }
 }

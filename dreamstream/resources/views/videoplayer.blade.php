@@ -338,7 +338,7 @@
 
         <div class="video-player">
             <video controls>
-                <source src="{{ asset($video->file_path) }}" type="video/mp4">
+                <source src="{{ asset('storage/' . $video->file_path) }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
             <div class="video-details">
@@ -363,7 +363,7 @@
             <h3>Upcoming Videos</h3>
             @foreach($upcomingVideos as $upcomingVideo)
                 <div class="video-card">
-                    <img src="{{ asset('Images/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }}">
+                    <img src="{{ asset('storage/' . $upcomingVideo->thumbnail) }}" alt="{{ $upcomingVideo->title }} Thumbnail">
                     <a href="{{ route('video.player', $upcomingVideo->id) }}">
                         <h4>{{ $upcomingVideo->title }}</h4>
                         <p>{{ $upcomingVideo->created_at->format('F j, Y') }}</p>

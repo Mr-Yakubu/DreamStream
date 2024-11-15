@@ -6,49 +6,75 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
-use FFMpeg\Exception\FFMpegException; // Import the FFMpegException class
 use Exception;
 
 class GenerateThumbnails extends Command
 {
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
     protected $signature = 'thumbnails:generate';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
     protected $description = 'Generate thumbnails for all uploaded videos';
 
+    /**
+     * Execute the console command.
+     */
     public function handle()
     {
-        // Fetch all videos from the database
-        $videos = DB::table('videos')->get();
+        $this->info('Starting thumbnail generation...');
 
-        foreach ($videos as $video) {
-            // Debugging: output the video object to see its properties
-            $this->info(print_r($video, true)); // Print the video object properties
+        try {
+            // Fetch all videos from the database
+            $videos = DB::table('videos')->get();
 
-            // Check if 'file_path' exists before accessing it
-            if (!isset($video->file_path)) {
-                $this->error("Video ID {$video->id} does not have a 'file_path' property.");
-                continue; // Skip this video if 'file_path' doesn't exist
+            foreach ($videos as $video) {
+                // Debugging: output video object
+                $this->info("Processing Video ID: {$video->id}");
+
+                // Check if 'file_path' exists
+                if (!isset($video->file_path)) {
+                    $this->error("Video ID {$video->id} does not have a 'file_path' property.");
+                    continue;
+                }
+
+                // Generate the thumbnail
+                $thumbnailPath = $this->generateThumbnail($video->file_path);
+
+                if ($thumbnailPath) {
+                    // Update the thumbnail path in the database
+                    DB::table('videos')
+                        ->where('id', $video->id)
+                        ->update(['thumbnail' => $thumbnailPath]);
+
+                    $this->info("Thumbnail generated for Video ID: {$video->id}");
+                } else {
+                    $this->error("Failed to generate thumbnail for Video ID: {$video->id}");
+                }
             }
 
-            // Generate the thumbnail
-            $thumbnailPath = $this->generateThumbnail($video->file_path);
-
-            // Update the thumbnail path in the database
-            if ($thumbnailPath) {
-                DB::table('videos')
-                    ->where('id', $video->id)
-                    ->update(['thumbnail' => $thumbnailPath]);
-
-                $this->info("Thumbnail generated for video ID: {$video->id}");
-            } else {
-                $this->error("Failed to generate thumbnail for video ID: {$video->id}");
-            }
+            $this->info('Thumbnail generation completed for all videos.');
+        } catch (Exception $e) {
+            $this->error("Error: " . $e->getMessage());
         }
-
-        $this->info('Thumbnail generation completed for all videos.');
     }
 
+    /**
+     * Generate a thumbnail for the given video path.
+     */
     private function generateThumbnail($videoPath)
     {
+        // Ensure the video path is consistent with the public directory
+        $fullVideoPath = 'videos/' . $videoPath; // Path relative to the 'public' disk
+        $this->info("Full video path: " . $fullVideoPath); // Debugging line to check the path
+
         // Define the thumbnail path based on the video filename
         $thumbnailPath = 'thumbnails/' . pathinfo($videoPath, PATHINFO_FILENAME) . '.jpg';
 
@@ -58,20 +84,20 @@ class GenerateThumbnails extends Command
         }
 
         try {
-            // Create an FFMpeg instance and open the video file
-            $ffmpeg = FFMpeg::create();
-            $video = $ffmpeg->open(storage_path('app/' . $videoPath));
+            // Use ProtoneMedia's FFMpeg package to open the video
+            $media = FFMpeg::fromDisk('public') // Use the 'public' disk for accessing files in public/videos
+                ->open($fullVideoPath);
 
-            // Generate the thumbnail and save it
-            $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(1))->save(storage_path('app/' . $thumbnailPath));
+            // Generate the thumbnail and save it in the public/thumbnails folder
+            $media->getFrameFromSeconds(1) // Get a frame at the 1-second mark
+                ->export()
+                ->toDisk('public') // Save the thumbnail in the 'public' disk
+                ->save($thumbnailPath); // Save as defined in $thumbnailPath
 
-            return $thumbnailPath; // Return the path to the generated thumbnail
-        } catch (Exception $e) {
-            $this->error("FFmpeg error: " . $e->getMessage());
-            return null; // Return null if an error occurs
+            return $thumbnailPath; // Return the relative path to the generated thumbnail
         } catch (\Exception $e) {
-            $this->error("General error: " . $e->getMessage());
-            return null; // Return null if an unexpected error occurs
+            $this->error("Error generating thumbnail: " . $e->getMessage());
+            return null; // Return null if an error occurs
         }
     }
 }
