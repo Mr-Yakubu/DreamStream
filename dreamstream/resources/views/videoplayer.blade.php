@@ -46,6 +46,14 @@
             align-items: center;
             margin-top: 20px;
         }
+
+        .navbar .search-bar img {
+            width: 50px; 
+            height: auto; 
+            max-width: 100%; 
+            border-radius: 50%; 
+        }   
+
         .navbar div {
             display: flex;
             align-items: center;
@@ -121,6 +129,89 @@
         .sidebar a i {
             margin-right: 10px;
         }
+        .comment-section {
+        width: 35%;
+        background-color: #f8f8f8;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-section h3 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+
+    .comment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .comment-form textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        resize: vertical;
+    }
+
+    .comment-form button {
+        align-self: flex-end;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .comment-form button:hover {
+        background-color: #45a049;
+    }
+
+    .comments-list {
+        margin-top: 20px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .comment {
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-actions {
+        margin-top: 10px;
+    }
+
+    .comment-actions button {
+        background: none;
+        border: none;
+        color: #007BFF;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .comment-actions button:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .main-content {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .video-player, .comment-section {
+            width: 90%;
+        }
+    }
         .video-player {
             flex-grow: 1;
             padding: 20px;
@@ -211,12 +302,34 @@
                 width: 100%; 
                 margin-left: 0; 
             }
+            .video-tags {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+}
+.video-tags h3 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.video-tags ul {
+    list-style-type: none;
+    padding: 0;
+}
+.video-tags ul li {
+    display: inline-block;
+    background-color: #f0f0f0;
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #333;
+}
         }
     </style>
     
     <script>
         function addToFavorites(videoId) {
-            fetch(`/favorites/add/${videoId}`, {
+            fetch(/favorites/add/${videoId}, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -236,7 +349,7 @@
     
         function likeVideo(videoId) {
             disableButtons(videoId, 'like');
-            fetch(`/video/${videoId}/like`, {
+            fetch(/video/${videoId}/like, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -245,14 +358,14 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
+                document.getElementById(likes-count-${videoId}).innerText = data.likes;
             })
             .catch(error => console.error('Error:', error));
         }
     
         function dislikeVideo(videoId) {
             disableButtons(videoId, 'dislike');
-            fetch(`/video/${videoId}/dislike`, {
+            fetch(/video/${videoId}/dislike, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -261,13 +374,13 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
+                document.getElementById(dislikes-count-${videoId}).innerText = data.dislikes;
             })
             .catch(error => console.error('Error:', error));
         }
     
         function sendViewCount(videoId) {
-            fetch(`/video/${videoId}/view`, {
+            fetch(/video/${videoId}/view, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -287,9 +400,9 @@
         // Function to disable like and dislike buttons
         function disableButtons(videoId, action) {
             if (action === 'like') {
-                document.querySelector(`.like-button`).disabled = true;
+                document.querySelector(.like-button).disabled = true;
             } else if (action === 'dislike') {
-                document.querySelector(`.dislike-button`).disabled = true;
+                document.querySelector(.dislike-button).disabled = true;
             }
         }
     
@@ -319,7 +432,7 @@
                     </button>
                 </form>
                 <a href="{{ route('settings') }}">
-                    <img src="profile-icon.png" alt="Profile" class="profile-icon" width="30">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
                 </a>
             </div>
         </div>
@@ -343,7 +456,14 @@
             </video>
             <div class="video-details">
                 <h2>{{ $video->title }}</h2>
-                <p>Uploaded by: {{ optional($video->name)->username ?? 'Unknown User' }}</p>
+                <div class="video-tags" style="display: flex; gap: 10px; align-items: center;">
+                    @foreach($video->tags as $tag)
+                        <span class="tag" style="background-color: #f0f0f0; padding: 5px 10px; border-radius: 20px; font-size: 14px; color: #333;">
+                            {{ $tag }}
+                        </span>
+                    @endforeach
+                </div>
+                <p>Uploaded by: {{ $video->uploader->username ?? 'Unknown User' }}</p>
                 <p>Uploaded on: {{ $video->created_at->format('d M Y') }}</p>
                 <p>Description: {{ $video->description }}</p>
                 <p>Views: {{ $video->views }}</p>
@@ -357,7 +477,7 @@
                     <span id="dislikes-count-{{ $video->id }}">{{ $video->dislikes }}</span>
                 </div>
             </div>
-        </div>
+</div>
 
         <div class="upcoming-section">
             <h3>Upcoming Videos</h3>

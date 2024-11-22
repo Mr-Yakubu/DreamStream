@@ -51,6 +51,13 @@ nav h1 {
             margin-top: 20px;
         }
 
+        .navbar .search-bar img {
+            width: 50px; 
+            height: auto; 
+            max-width: 100%; 
+            border-radius: 50%; 
+        }   
+
         .navbar div {
             display: flex;
             align-items: center;
@@ -220,6 +227,38 @@ nav h1 {
             background-color: #2e3031; /* Darker shade on hover */
             transform: scale(1.05);
         }
+
+        /* Keyframes for right to left animation */
+        @keyframes slideFromRight {
+        0% {
+        transform: translateX(100%); /* Start from 100% to the right */
+        opacity: 0; /* Start invisible */
+        }
+        100% {
+        transform: translateX(0); /* End at original position */
+        opacity: 1; /* End fully visible */
+        }
+        }
+
+                /* Apply animation to elements you want to animate */
+        .animate-right-to-left {
+            animation: slideFromRight 1s ease-out; /* Duration of 1 second, easing function for smoothness */
+        }
+
+            /* Optional: Styling for the container or sections */
+        .animated-section {
+        display: block;
+        padding: 20px;
+        background-color: #f0f0f0; /* Light background color */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+        margin: 15px 0; /* Spacing between sections */
+        }
+
+        .manage-videos, .user-activity {
+        display: none; /* Hidden by default */
+        }
+
     </style>
 </head>
 <body>
@@ -236,7 +275,7 @@ nav h1 {
                     <input type="text" name="query" placeholder="Search..." required>
                     <button type="submit" style="display: none;"></button>
                 </form>
-                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}"><img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
             </div>
         </div>
     </nav>
@@ -262,35 +301,190 @@ nav h1 {
 
         <!-- Settings Page Content -->
         <div class="settings-container">
+            <!-- Settings Header (No Animation here) -->
             <div class="settings-header">
                 <a href="#" class="active">Dashboard</a>
                 <a href="#">Manage Videos</a>
                 <a href="#">User Activity</a>
             </div>
-            <div class="settings-sections">
-                <div class="settings-card" id="accountInfoCard">Account Information</div>
-                <div class="settings-card">User Channel Information</div>
-                <div class="settings-card" id="uploadHistoryCard">Upload History</div>
-                <div class="settings-card">Deactivate Account</div>
+        
+            <!-- Dashboard Section with Animation -->
+            <div class="dashboard animated-section animate-right-to-left">
+                <h1>Welcome to the Dashboard</h1>
+                <p>Dashboard Overview.</p>
+        
+                <!-- Settings Sections inside Dashboard -->
+                <div class="settings-sections">
+                    <!-- Individual Cards with Animation -->
+                    <div class="settings-card animated-section animate-right-to-left" id="accountInfoCard">
+                        Account Information
+                        <div class="account-info" id="accountInfo">
+                            <h2>Account Information</h2>
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" value="" placeholder="Your Username">
+                            <label for="email">Email:</label>
+                            <input type="text" id="email" value="" disabled>
+                            <label for="date_of_birth">Date of Birth:</label>
+                            <input type="text" id="date_of_birth" value="" disabled>
+                            <button id="saveButton">Save Changes</button>
+                        </div>
+                    </div>
+                    <div class="settings-card animated-section animate-right-to-left">
+                        User Channel Information
+                    </div>
+                    <div class="settings-card animated-section animate-right-to-left" id="uploadHistoryCard">
+                        Upload History
+                        <div class="upload-history" id="uploadHistory">
+                            <div id="uploadList"></div>
+                        </div>
+                    </div>
+                    <div class="settings-card animated-section animate-right-to-left">
+                        Deactivate Account
+                    </div>
+                </div>
             </div>
 
-            <div class="account-info" id="accountInfo">
-                <h2>Account Information</h2>
-                <label for="username">Username:</label>
-                <input type="text" id="username" value="" placeholder="Your Username">
-                <label for="email">Email:</label>
-                <input type="text" id="email" value="" disabled>
-                <label for="date_of_birth">Date of Birth:</label>
-                <input type="text" id="date_of_birth" value="" disabled>
-                <button id="saveButton">Save Changes</button>
-            </div>
 
-            <div class="upload-history" id="uploadHistory">
-                <h2>Upload History</h2>
-                <div id="uploadList"></div>
+<!------- Fix the Manage Videos Section ------>
+
+        
+            <!-- Manage Videos Section -->
+            <div class="manage-videos animated-section animate-right-to-left" id="manageVideosSection">
+                <h3>Manage Your Videos</h3>
+                <p>Content to manage videos will be displayed here.</p>
             </div>
+            
+        
+<!------- Fix the User Activity ------>
+
+
+             
+<div class="user-activity animated-section animate-right-to-left" id="userActivitySection">
+    <h2>User Activity</h2>
+    <p>Content for User Activites will be displayed here.</p>
+
+    <!--
+    {{-- @if($activities->isEmpty()) --}}
+        <p>No recent activity found.</p>
+    {{-- @else --}}
+        <ul class="activity-list">
+            {{-- @foreach($activities as $activity) --}}
+                <li>
+                    <strong><{ $activity->action }}</strong>
+                    <p>{ $activity->details }}</p>
+                    <small>On: { $activity->created_at->format('M d, Y h:i A') }}</small>
+                </li>
+            {{-- @endforeach --}}
+        </ul>
+    {{-- @endif --}}
+</div>
+-->
+
+
         </div>
     </div>
+
+
+
+    <script>
+        function fetchUserActivity() {
+            fetch('{{ route('user.activity') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const activitySection = document.getElementById('userActivitySection');
+                    let activityHtml = '';
+                    
+                    if (data.activities.length === 0) {
+                        activityHtml = '<p>No recent activity found.</p>';
+                    } else {
+                        activityHtml = '<ul class="activity-list">';
+                        data.activities.forEach(activity => {
+                            activityHtml += `
+                                <li>
+                                    <strong>${activity.action}</strong>
+                                    <p>${activity.details}</p>
+                                    <small>On: ${new Date(activity.created_at).toLocaleString()}</small>
+                                </li>
+                            `;
+                        });
+                        activityHtml += '</ul>';
+                    }
+                    
+                    activitySection.innerHTML = activityHtml;
+                })
+                .catch(error => console.error('Error fetching user activity:', error));
+        }
+    
+        // Call the function to load the user activity initially
+        fetchUserActivity();
+    </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all the links in the settings header
+            const links = document.querySelectorAll('.settings-header a');
+            
+            // Get all the sections
+            const dashboard = document.querySelector('.dashboard');
+            const manageVideos = document.querySelector('.manage-videos');
+            const userActivity = document.querySelector('.user-activity');
+            
+            // Function to show the active section and hide others
+            function switchView(activeSection) {
+                dashboard.style.display = 'none';
+                manageVideos.style.display = 'none';
+                userActivity.style.display = 'none';
+                
+                activeSection.style.display = 'block';
+            }
+            
+            // Set initial view (show dashboard by default)
+            switchView(dashboard);
+            
+            // Event listener for each link in the header
+            links.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    // Prevent the default link behavior
+                    event.preventDefault();
+                    
+                    // Remove active class from all links
+                    links.forEach(link => link.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    link.classList.add('active');
+                    
+                    // Switch to the corresponding section
+                    if (link.textContent === 'Dashboard') {
+                        switchView(dashboard);
+                    } else if (link.textContent === 'Manage Videos') {
+                        switchView(manageVideos);
+                    } else if (link.textContent === 'User Activity') {
+                        switchView(userActivity);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // Function to display the correct section based on clicked link
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.settings-container > div').forEach(div => {
+                div.classList.remove('active-section');
+            });
+
+            // Remove active class from all links
+            document.querySelectorAll('.settings-header a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show the clicked section and add active class to the respective link
+            document.getElementById(section + 'Section').classList.add('active-section');
+            document.querySelector('.settings-header a[href="#' + section + 'Section"]').classList.add('active');
+        }
+    </script>
 
     <script>
         document.getElementById('accountInfoCard').addEventListener('click', function() {
@@ -354,5 +548,43 @@ nav h1 {
             });
         });
     </script>    
+
+<script>
+    // Select the navigation links
+    const manageVideosLink = document.querySelector('.settings-header a:nth-child(2)');
+    const userActivityLink = document.querySelector('.settings-header a:nth-child(3)');
+
+    // Select the sections that need to be shown/hidden
+    const manageVideosSection = document.getElementById('manageVideosSection');
+    const userActivitySection = document.getElementById('userActivitySection');
+    const dashboardSection = document.querySelector('.dashboard');
+
+    // Function to hide all sections
+    function hideSections() {
+        manageVideosSection.style.display = 'none';
+        userActivitySection.style.display = 'none';
+    }
+
+    // Initially hide the sections
+    hideSections();
+
+    // Show the Manage Videos section when the link is clicked
+    manageVideosLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        hideSections(); // Hide all other sections
+        manageVideosSection.style.display = 'block'; // Show the clicked section
+    });
+
+    // Show the User Activity section when the link is clicked
+    userActivityLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        hideSections(); // Hide all other sections
+        userActivitySection.style.display = 'block'; // Show the clicked section
+    });
+
+    // Show the Dashboard section by default
+    dashboardSection.style.display = 'block'; // Make sure dashboard is visible initially
+</script>
 </body>
 </html>
+

@@ -11,16 +11,15 @@ class CommentController extends Controller
     public function store(Request $request, $videoId)
 {
     $request->validate([
-        'comment' => 'required|string|max:255',
-        'userId' => 'required|integer'
+        'content' => 'required|string|max:1000',
     ]);
 
-    $comment = new Comment();
-    $comment->text = $request->comment;
-    $comment->user_id = $request->userId;
-    $comment->video_id = $videoId;
-    $comment->save();
+    Comment::create([
+        'video_id' => $videoId,
+        'user_id' => auth()->user()->id,
+        'content' => $request->content,
+    ]);
 
-    return response()->json(['comment' => $comment->text]);
+    return back()->with('success', 'Comment added successfully');
 }
 }

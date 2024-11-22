@@ -48,6 +48,13 @@
             margin-top: 20px;
         }
 
+        .navbar .search-bar img {
+            width: 50px; 
+            height: auto; 
+            max-width: 100%; 
+            border-radius: 50%; 
+        }   
+
         .navbar div {
             display: flex;
             align-items: center;
@@ -191,7 +198,7 @@
                     </button>
                 </form>
                 <a href="{{ route('settings') }}">
-                    <img src="profile-icon.png" alt="Profile" class="profile-icon" width="30">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
                 </a>
             </div>
         </div>

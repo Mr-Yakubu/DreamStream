@@ -51,6 +51,13 @@
             margin-top: 20px;
         }
 
+        .navbar .search-bar img {
+            width: 50px; 
+            height: auto; 
+            max-width: 100%; 
+            border-radius: 50%; 
+        }   
+
         .navbar div {
             display: flex;
             align-items: center;
@@ -154,30 +161,30 @@
         }
 
         .video-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-left: 20px;
-            padding: 20px;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px; /* Reduced spacing between cards */
+        margin-left: 45px; /* Reduced margin */
+        padding: 50px; /* Reduced padding */
+        flex-grow: 1;
+        overflow-y: auto;
+    }
 
-        .video-card {
-            border: 1px solid #ccc;
-            background-color: white;
-            border-radius: 20px;
-            max-width: 385px;
-            max-height: 250px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
-        }
+    .video-card {
+        border: 1px solid #ccc;
+        background-color: white;
+        border-radius: 15px; /* Reduced border radius */
+        max-width: 350px; /* Adjusted size */
+        max-height: 220px; /* Adjusted size */
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
+    }
 
         .video-card:hover {
             background-color: #f0f0f0;
@@ -211,8 +218,8 @@
         }
 
         .video-card p {
-            margin: 10px 0 0; /* Adjust margin for video title */
-        }
+        margin: 5px 0 0; /* Reduced top margin for video title */
+    }
 
         .video-card a {
             text-decoration: none;
@@ -237,7 +244,7 @@
                     </button>
                 </form>
                 <a href="{{ route('settings') }}">
-                    <img src="profile-icon.png" alt="Profile" class="profile-icon" width="30">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
                 </a>
             </div>
         </div>

@@ -74,6 +74,7 @@
             </form>
         </div>
     </div>
+
     
     <script>
         document.getElementById('video_file_input').addEventListener('change', function () {

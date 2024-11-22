@@ -9,5 +9,16 @@ class Comment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['content', 'media_id'];
+    protected $fillable = ['video_id', 'user_id', 'content'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function video()
+    {
+        return $this->belongsTo(Video::class);
+    }
+    
 }

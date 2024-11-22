@@ -7,43 +7,95 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ParentalControl;
 use App\Models\User;
+use App\Models\Comment;
 use FFMpeg\FFMpeg;
 
 class VideoController extends Controller
 {
+
+    public function showUserChannelInfo($userId)
+{
+    // Retrieve the user based on their ID
+    $user = User::findOrFail($userId);
+
+    // Get all videos uploaded by the user (adjust according to your relationships and table structure)
+    $videosUploaded = Video::where('uploaded_by', $userId)->get();
+
+    // Define the variables you need to pass to the view
+    $numOfVideos = $videosUploaded->count(); // Count of uploaded videos
+    $totalViews = $videosUploaded->sum('views'); // Sum of the 'views' column from videos
+    $totalLikes = $videosUploaded->sum('likes'); // Sum of the 'likes' column from videos
+
+    // Pass these variables to the Blade view
+    return view('settings', compact('numOfVideos', 'totalViews', 'totalLikes'));
+}
+
+
     // Show the list of all videos
     public function index()
-{
-    $videos = Video::all();
-
-    if (auth()->user()->user_type == 'child') {
-        $parentRestrictedKeywords = ParentalControl::where('user_id', auth()->id())->first();
-        
-        if ($parentRestrictedKeywords) {
-            $restrictedKeywords = json_decode($parentRestrictedKeywords->restricted_keywords);
-
-            $videos = $videos->filter(function ($video) use ($restrictedKeywords) {
-                foreach ($restrictedKeywords as $keyword) {
-                    if (stripos($video->tags, $keyword) !== false) {
-                        return false; // Exclude this video if any keyword is found
-                    }
+    {
+        // Fetch all videos from the database
+        $videos = Video::all();
+    
+        // Check if the logged-in user is a child
+        if (auth()->user()->user_type == 'child') {
+            // Retrieve parental control settings for this user
+            $parentRestrictedKeywords = ParentalControl::where('user_id', auth()->id())->first();
+    
+            if ($parentRestrictedKeywords) {
+                // Decode the restricted keywords (ensure it is a valid JSON format)
+                $restrictedKeywords = json_decode($parentRestrictedKeywords->restricted_keywords, true);
+    
+                if (is_array($restrictedKeywords)) {
+                    // Filter out videos with any of the restricted keywords in the tags
+                    $videos = $videos->filter(function ($video) use ($restrictedKeywords) {
+                        // Loop through each restricted keyword
+                        foreach ($restrictedKeywords as $keyword) {
+                            // Check if the keyword exists in the video's tags
+                            if (stripos($video->tags, $keyword) !== false) {
+                                return false; // Exclude this video if the keyword is found
+                            }
+                        }
+                        return true; // Include the video if no keyword matches
+                    });
                 }
-                return true; // Include this video if no restricted keyword is found
-            });
+            }
         }
+    
+        // Return the homepage view with the filtered list of videos
+        return view('home', compact('videos'));
     }
-
-    return view('videos.index', compact('videos'));
-}
 
     // Show the videos uploaded by the logged-in user
     public function showMyVideos()
     {
+
+        $userId = auth()->id();
+
         // Fetch videos where the uploaded_by field matches the current authenticated user's ID
-        $myVideos = Video::where('uploaded_by', auth()->id())->get();
+        
+        $myVideos = Video::where('uploaded_by', $userId)->get();
 
         return view('video.edit', compact('myVideos')); 
     }
+
+    public function showManageVideos()
+{
+    // Ensure the user is logged in
+    if (!auth()->check()) {
+        return redirect()->route('login')->with('error', 'Please log in to view your videos.');
+    }
+
+    // Get the logged-in user's ID
+    $userId = auth()->user()->id;
+
+    // Get videos uploaded by the user
+    $videos = Video::where('uploaded_by', $userId)->get();
+    dd($videos);
+
+    // Pass videos to the view
+    return view('manage-videos', compact('videos'));
+}
 
     // Show the video player and upcoming videos
     public function show($id)
@@ -58,6 +110,13 @@ class VideoController extends Controller
                                 ->get();
 
         return view('videoplayer', compact('video', 'upcomingVideos')); 
+
+        $video = Video::findOrFail($id);  // Get the video by its ID
+    
+        // Fetch comments or set to empty collection if none are found
+        $comments = Comment::where('video_id', $id)->get(); 
+    
+        return view('video-player', compact('video', 'comments'));  // Pass comments (even empty)
     }
 
     // Search for videos by title
@@ -148,60 +207,58 @@ class VideoController extends Controller
     }
 
     // Store a new video
-// Store a new video
-public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'description' => 'required|string|max:1000',
-        'video_file' => 'required|mimes:mp4,avi,mov|max:20480',
-        'tags' => 'nullable|string|max:500',
-    ]);
-
-    try {
-        if ($request->hasFile('video_file')) {
-            // Store the video file
-            $filePath = $request->file('video_file')->store('videos/videos', 'public');
-
-            // Retrieve the user information
-            $user = auth()->user();
-            $uploadedBy = $user->username ?? null;  // Set username if available, otherwise null
-
-            // Create the video entry, including the 'uploaded_by' field if it's available
-            $video = Video::create([
-                'title' => $request->input('title'),
-                'description' => $request->input('description'),
-                'file_path' => $filePath,
-                'user_id' => $user->id,
-                'tags' => $request->input('tags'),
-                'uploaded_by' => $uploadedBy, // Use username if it's available
-                'url' => null, // Set URL to null initially
-            ]);
-
-            // Generate the URL for the video after upload
-            $video->url = $this->generateVideoUrl($filePath);
-
-            // Save the video with the generated URL
-            $video->save();
-
-
-            return redirect()->route('edit_upload')->with('success', 'Video uploaded successfully!');
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'video_file' => 'required|mimes:mp4,avi,mov|max:20480',
+            'tags' => 'nullable|string|max:500', // We expect a string of tags separated by commas
+        ]);
+    
+        try {
+            if ($request->hasFile('video_file')) {
+                // Store the video file
+                $filePath = $request->file('video_file')->store('videos/videos', 'public');
+    
+                // Retrieve the user information
+                $user = auth()->user();
+                $uploadedBy = $user->username ?? null;  // Set username if available, otherwise null
+    
+                // Create the video entry, including the 'uploaded_by' field if it's available
+                $video = Video::create([
+                    'title' => $request->input('title'),
+                    'description' => $request->input('description'),
+                    'file_path' => $filePath,
+                    'user_id' => $user->id,
+                    'tags' => $request->input('tags'),  // Store the tags as a comma-separated string
+                    'uploaded_by' => $uploadedBy, // Use username if it's available
+                    'url' => null, // Set URL to null initially
+                ]);
+    
+                // Generate the URL for the video after upload
+                $video->url = $this->generateVideoUrl($filePath);
+    
+                // Save the video with the generated URL
+                $video->save();
+    
+                return redirect()->route('edit_upload')->with('success', 'Video uploaded successfully!');
+            }
+    
+            return redirect()->back()->with('error', 'Video upload failed. No file received.');
+        } catch (\Exception $e) {
+            // Log the error and debug the issue
+            logger()->error('Video upload failed', ['error' => $e->getMessage()]);
+            dd('Exception caught:', $e->getMessage(), $e->getTrace());
+            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
         }
-
-        return redirect()->back()->with('error', 'Video upload failed. No file received.');
-    } catch (\Exception $e) {
-        // Log the error and debug the issue
-        logger()->error('Video upload failed', ['error' => $e->getMessage()]);
-        dd('Exception caught:', $e->getMessage(), $e->getTrace());
-        return redirect()->back()->with('error', 'Something went wrong. Please try again.');
     }
-}
 
-protected function generateVideoUrl($filePath)
-{
-    // Assuming the URL is based on the file path, e.g., generate a URL from the file's public location
-    return asset('storage/' . $filePath); // or any custom URL generation logic
-}
+    protected function generateVideoUrl($filePath)
+    {
+        // Assuming the URL is based on the file path, e.g., generate a URL from the file's public location
+        return asset('storage/' . $filePath); // or any custom URL generation logic
+    }
 
     // Filter videos based on restricted keywords for child users
     private function filterVideosWithRestrictedKeywords($videos)

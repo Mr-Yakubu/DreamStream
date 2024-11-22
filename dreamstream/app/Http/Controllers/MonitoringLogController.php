@@ -7,46 +7,47 @@ use Illuminate\Http\Request;
 
 class MonitoringLogController extends Controller
 {
-    public function index()
+    // Display the user activity logs
+    public function showUserActivity()
     {
-        $logs = MonitoringLog::all();
-        return view('logs.index', compact('logs'));
+        $userId = auth()->user()->id; // Get the current logged-in user's ID
+
+        // Fetch the latest 10 activity logs for the user
+        $activities = MonitoringLog::where('user_id', $userId)
+                                   ->orderBy('created_at', 'desc')
+                                   ->take(10)
+                                   ->get();
+
+        // Return a view with the activities
+        return view('user.activity', compact('activities'));
     }
 
-    public function create()
+    // Log a new user activity
+    public function logActivity(Request $request)
     {
-        return view('logs.create');
-    }
+        $userId = auth()->user()->id;
 
-    public function store(Request $request)
-    {
-        MonitoringLog::create($request->all());
-        return redirect()->route('logs.index');
-    }
+        // Store the new log entry in the database
+        MonitoringLog::create([
+            'user_id' => $userId,
+            'action' => $request->action,
+            'details' => $request->details,
+        ]);
 
-    public function show($id)
-    {
-        $log = MonitoringLog::findOrFail($id);
-        return view('logs.show', compact('log'));
+        // You can redirect or return a response
+        return redirect()->back()->with('status', 'Activity logged successfully!');
     }
-
-    public function edit($id)
+    public function uploadVideo(Request $request)
     {
-        $log = MonitoringLog::findOrFail($id);
-        return view('logs.edit', compact('log'));
-    }
+    // Video upload logic here
 
-    public function update(Request $request, $id)
-    {
-        $log = MonitoringLog::findOrFail($id);
-        $log->update($request->all());
-        return redirect()->route('logs.index');
-    }
+    // Log the user activity in the monitoring_logs table
+    MonitoringLog::create([
+        'user_id' => auth()->user()->id,
+        'action' => 'Video Upload',
+        'details' => 'User uploaded a new video: ' . $request->video_title
+    ]);
 
-    public function destroy($id)
-    {
-        $log = MonitoringLog::findOrFail($id);
-        $log->delete();
-        return redirect()->route('logs.index');
+    return redirect()->route('video.upload.success');
     }
 }

@@ -95,6 +95,7 @@
         }
 
         .error-message {
+            font-family: 'Nunito', sans-serif;
             margin-top: 10px; /* Space above the error message */
             color: rgb(255, 12, 12); /* Color for error message */
             text-align: center; /* Align error message to center */

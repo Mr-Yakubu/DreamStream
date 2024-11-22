@@ -23,6 +23,12 @@ class User extends Authenticatable // Extend Authenticatable instead of Model
     return $this->belongsTo(User::class, 'parent_id');  // A child belongs to a parent
 }
 
+public function parentalControl()
+    {
+        // A user has one parental control
+        return $this->hasOne(ParentalControl::class, 'user_id'); // Assuming user_id is the foreign key
+    }
+
 // For child to parent relationship
 public function parentControl()
 {
@@ -53,11 +59,6 @@ public function children()
     public function recommendations()
     {
         return $this->hasMany(Recommendation::class);
-    }
-    
-    public function parentalControl()
-    {
-        return $this->hasOne(ParentalControl::class);
     }
 
     // Additional method for password verification

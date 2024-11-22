@@ -17,6 +17,7 @@ use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\VideoFilterController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\ProfileController;
 
 
 
@@ -29,7 +30,7 @@ use App\Http\Controllers\ChannelController;
 
 // Redirect root URL to the login page
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('home');
 })->name('landing');
 
 // Public Routes
@@ -67,6 +68,29 @@ Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('adm
 // Settings Routes
 Route::get('/user/account/info', [UserController::class, 'getAccountInfo'])->name('user.account.info');
 Route::post('/user/update/username', [UserController::class, 'updateUsername'])->name('user.update.username');
+Route::get('/user/{userId}/settings', [SettingsController::class, 'showUserChannelInfo']);
+
+
+// Route to display the user activity logs
+Route::get('/user-activity', [MonitoringLogController::class, 'showUserActivity'])->name('user.activity');
+
+// Route to log a new user activity (for example, after uploading a video)
+Route::post('/log-activity', [MonitoringLogController::class, 'logActivity'])->name('log.activity');
+Route::get('/user-activity', [MonitoringLogController::class, 'showUserActivity'])->name('user.activity');
+
+
+
+// Route for the settings page
+Route::get('/settings', [UserController::class, 'settingsPage'])->name('settings');
+
+// Route for fetching uploaded videos of the authenticated user
+Route::get('/user/uploaded/videos', [UserController::class, 'getUploadedVideos'])->name('user.uploaded.videos');
+
+// Route for deleting a video
+Route::delete('/user/delete/video/{videoId}', [UserController::class, 'deleteVideo'])->name('user.delete.video');
+
+
+
 
 // Upload History
 
@@ -146,13 +170,21 @@ Route::get('/parental-controls', [ParentalControlController::class, 'index'])
     ->name('parental_controls.show');
 
 
+Route::get('/manage-videos', [VideoController::class, 'showManageVideos'])->name('manage-videos');
+
+
 // Comments, Recommendations, and Parental Controls
 Route::resource('comments', CommentController::class);
 Route::post('/video/{video}/comment', [CommentController::class, 'store']);
+Route::post('/video/{video}/comments', [CommentController::class, 'store'])->name('comments.store');
 
 // Settings
 
 Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+
+// Profile Picture
+Route::get('/profile/update-picture', [ProfileController::class, 'showUpdatePictureForm'])->name('profile.picture.form');
+Route::post('/profile/update-picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.picture.update');
 
 Route::resource('recommendations', RecommendationController::class);
 Route::resource('parental-controls', ParentalControlController::class);

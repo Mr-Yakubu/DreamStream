@@ -58,6 +58,13 @@
             margin: 0; /* Remove margin to eliminate space */
         }
 
+        .navbar .search-bar img {
+            width: 50px; /* Set the desired initial size */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 100%; /* Prevent image from exceeding container width */
+            border-radius: 50%; /* Make it a circle if it's a square image */
+        }   
+
         .navbar-links {
             display: flex;
             justify-content: space-between; /* Evenly distribute links */
@@ -79,7 +86,7 @@
 
         .search-bar {
             display: flex;
-            align-items: center;
+            align-items: auto;
         }
 
         .search-bar input[type="text"] {
@@ -192,16 +199,17 @@
             <a href="#">CATEGORIES</a>
         </div>
         <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
-                        <i class="fas fa-search" style="color: black;"></i>
-                    </button>
-                </form>
-                <a href="{{ route('settings') }}">
-                    <img src="profile-icon.png" alt="Profile" class="profile-icon" width="30">
-                </a>
-            </div>
+            <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
+                <input type="text" name="query" placeholder="Search..." required>
+                <button type="submit" style="background: none; border: none;">
+                    <i class="fas fa-search" style="color: black;"></i>
+                </button>
+            </form>
+            
+            <a href="{{ route('settings') }}" class="profile-icon">
+                <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+            </a>
+        </div>
     </nav>
 
     <div class="main-content">

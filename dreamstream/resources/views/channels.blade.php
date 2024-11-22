@@ -51,6 +51,13 @@
             margin-top: 20px;
         }
 
+        .navbar .search-bar img {
+            width: 50px; /* Set the desired initial size */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 100%; /* Prevent image from exceeding container width */
+            border-radius: 50%; /* Make it a circle if it's a square image */
+        }   
+
         .navbar div {
             display: flex;
             align-items: center;
@@ -213,7 +220,7 @@
                     <input type="text" name="query" placeholder="Search..." required>
                     <button type="submit" style="display: none;"></button> 
                 </form>
-                <a href="{{ route('settings') }}"><img src="profile-icon.png" alt="Profile" class="profile-icon" width="30"></a>
+                <a href="{{ route('settings') }}"><img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
             </div>            
         </div>
     </nav>
