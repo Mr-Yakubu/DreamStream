@@ -2,26 +2,36 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2>Update Profile Picture</h2>
-    <div class="d-flex justify-content-center align-items-center flex-column mt-4">
-        <!-- Current Profile Picture -->
-        <div class="mb-4">
-            <h4>Current Profile Picture</h4>
-            <img id="currentProfilePicture" 
-                 src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
-                 alt="Profile Picture" 
-                 style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #333;">
-        </div>
-        
-        <!-- Profile Picture Upload Form -->
-        <form action="{{ route('profile.picture.update') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group mb-3">
-                <label for="profile_picture" class="form-label">Upload New Profile Picture</label>
-                <input type="file" id="profile_picture" name="profile_picture" class="form-control" accept="image/*" required>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header text-center">
+                    <h2>Update Profile Picture</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Current Profile Picture -->
+                    <div class="text-center mb-4">
+                        <h4>Current Profile Picture</h4>
+                        <img id="currentProfilePicture" 
+                             src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                             alt="Profile Picture" 
+                             style="width: 150px; height: 150px; border-radius: 50%; border: 2px solid #333;">
+                    </div>
+                    
+                    <!-- Profile Picture Upload Form -->
+                    <form action="{{ route('profile.picture.update') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group mb-3 text-center">
+                            <label for="profile_picture" class="form-label">Upload New Profile Picture</label>
+                            <input type="file" id="profile_picture" name="profile_picture" class="form-control" accept="image/*" required>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-custom">Update Picture</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <button type="submit" class="btn btn-custom">Update Picture</button>
-        </form>
+        </div>
     </div>
 </div>
 @endsection
@@ -49,5 +59,10 @@
     .form-control:focus {
         border-color: #007bff; 
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
     }
 </style>

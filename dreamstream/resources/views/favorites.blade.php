@@ -253,7 +253,7 @@
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('settings') }}">
+                <a href="{{ route('profile.picture.form') }}">
                     <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
                 </a>
             </div>
@@ -275,23 +275,29 @@
         </div>
 
         <div class="video-grid">
-            @foreach($favorites as $video)
-                <div class="video-card">
-                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
-                        <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
-                        <div class="play-overlay"><i class="fas fa-play"></i></div>
-                    </a>
-                    <p>{{ $video->title }}</p>
-
-                    <!-- Remove button -->
-                    <form action="{{ route('favorites.remove', ['id' => $video->id]) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="remove-btn">Remove from Favorites</button>
-                    </form>
+            @if($favorites->isEmpty())
+                <div style="position: absolute; right: 750px; top: 50%; transform: translate(0, -50%); text-align: center;">
+                    <p style="font-size: 1.5rem; color: black;">Please Add Videos To Favorites!</p>
                 </div>
-            @endforeach
-        </div>
+            @else
+                @foreach($favorites as $video)
+                    <div class="video-card">
+                        <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
+                            <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
+                            <div class="play-overlay"><i class="fas fa-play"></i></div>
+                        </a>
+                        <p>{{ $video->title }}</p>
+        
+                        <!-- Remove button -->
+                        <form action="{{ route('favorites.remove', ['id' => $video->id]) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="remove-btn">Remove from Favorites</button>
+                        </form>
+                    </div>
+                @endforeach
+            @endif
+        </div>        
     </div>
 </body>
 </html>

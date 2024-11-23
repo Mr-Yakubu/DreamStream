@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MonitoringLogController;
-use App\Http\Controllers\MediaController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ParentalControlController;
@@ -17,6 +16,8 @@ use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\VideoFilterController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 
 
@@ -48,6 +49,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
+
+
+// Password Reset routes 
+
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot-password.submit');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('reset-password');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('reset-password.submit');
 
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -88,6 +97,12 @@ Route::get('/user/uploaded/videos', [UserController::class, 'getUploadedVideos']
 
 // Route for deleting a video
 Route::delete('/user/delete/video/{videoId}', [UserController::class, 'deleteVideo'])->name('user.delete.video');
+
+// Parental controls report 
+Route::get('/parent/dashboard', [ParentalControlController::class, 'index'])->name('parent_dashboard');
+Route::get('/parent/child/{childUserId}/activity-report', [ParentalControlController::class, 'childActivityReport'])->name('child_activity_report');
+Route::get('/parent/child/{childUserId}/performance-report', [ParentalControlController::class, 'childPerformanceReport'])->name('child_performance_report');
+
 
 
 
@@ -139,6 +154,7 @@ Route::get('/filter-videos', [VideoController::class, 'filterVideos']);
 
 Route::get('parental-controls/{childUserId}', [ParentalControlController::class, 'show'])->name('parental_controls.show');
 Route::get('parental-controls/{childUserId}', [ParentalControlController::class, 'showParentalControls'])->name('parental_controls.show');
+Route::delete('/parent/delete-child/{id}', [ParentalControlController::class, 'deleteChildAccount'])->name('deleteChildAccount');
  
 
 
@@ -170,7 +186,11 @@ Route::get('/parental-controls', [ParentalControlController::class, 'index'])
     ->name('parental_controls.show');
 
 
-Route::get('/manage-videos', [VideoController::class, 'showManageVideos'])->name('manage-videos');
+
+Route::get('/settings/manage-videos', [SettingsController::class, 'showManageVideos'])->name('settings.manage-videos');
+
+
+
 
 
 // Comments, Recommendations, and Parental Controls

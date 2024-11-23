@@ -205,8 +205,7 @@
                     <i class="fas fa-search" style="color: black;"></i>
                 </button>
             </form>
-            
-            <a href="{{ route('settings') }}" class="profile-icon">
+            <a href="{{ route('profile.picture.form') }}">
                 <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
             </a>
         </div>

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Video;  // Update this to use Video instead of Media
+use App\Models\Video; 
 
 class HomeController extends Controller
 {
@@ -24,3 +24,4 @@ class HomeController extends Controller
     }
 
 }
+

@@ -16,17 +16,73 @@ class ParentalControlController extends Controller
         return view('parent_dashboard', compact('children'));
     }
 
+
+    public function deleteChildAccount($id)
+{
+    // Ensure the parent can only delete their child's account
+    $parentId = auth()->id(); // Assuming parent is authenticated
+    $child = User::where('id', $id)
+                ->where('user_type', 'child') // Ensure it's a child account
+                ->where('parent_id', $parentId) // Validate relationship (if applicable)
+                ->first();
+
+    if (!$child) {
+        return redirect()->back()->with('error', 'Unauthorized action or child account not found.');
+    }
+
+    $child->delete();
+
+    return redirect()->back()->with('success', 'Child account deleted successfully.');
+}
+
     // Display a dashboard showing children associated with the logged-in parent
     public function index()
     {
         $parentId = auth()->id(); // Get the logged-in parent's ID
 
         // Retrieve all children associated with the logged-in parent
-        $children = User::where('parent_id', $parentId)->get();
+        $children = User::where('parent_id', $parentId)->get()->map(function ($child) {
+            return [
+                'id' => $child->id,
+                'name' => $child->name,
+                'username' => $child->username,
+                'videos_watched' => $child->videosWatched->count(),
+                'likes' => $child->likes->count(),
+                'dislikes' => $child->dislikes->count(),
+                'favorites' => $child->favorites->count(),
+                'average_watch_time' => $child->videosWatched->avg('duration') ?? 0,
+            ];
+        });
 
-        // Pass children to the view
         return view('parent_dashboard', compact('children'));
     }
+
+    public function childActivityReport($childUserId)
+{
+    $child = User::findOrFail($childUserId); // Fetch the child record
+
+    // Fetch activity logs or assign an empty array if none exist
+    $activityLogs = $child->activityLogs()->orderBy('timestamp', 'desc')->get() ?? [];
+
+    return view('child_activity_report', compact('child', 'activityLogs'));
+}
+
+    public function childPerformanceReport($childUserId)
+    {
+        // Fetch specific child's performance metrics
+        $child = User::findOrFail($childUserId);
+        $performanceData = [
+            'most_watched_genre' => $child->videosWatched->groupBy('genre')->sortDesc()->keys()->first() ?? 'N/A',
+            'average_watch_time' => $child->videosWatched->avg('duration') ?? 0,
+        ];
+
+        return view('child_performance_report', compact('child', 'performanceData'));
+    }
+
+
+
+
+
 
     public function showParentalControls($childUserId)
     {

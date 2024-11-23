@@ -35,7 +35,7 @@ class Video extends Model
     {
         return $this->hasMany(Favorite::class, 'video_id');
     }
-
+    
     // Relationship with Comments
     public function comments()
     {
@@ -52,30 +52,5 @@ class Video extends Model
     public function setTagsAttribute($value)
     {
         $this->attributes['tags'] = implode(', ', (array) $value);  // Convert array to comma-separated string when saving
-    }
-
-    /**
-     * Filter videos based on parental control restrictions
-     */
-    public static function filterVideosByParentalControl($userId)
-    {
-        // Fetch the parental control for the given user
-        $parentalControl = ParentalControl::where('user_id', $userId)->first();
-
-        if ($parentalControl) {
-            // Get the restricted keywords
-            $restrictedKeywords = $parentalControl->restricted_keywords;
-
-            // Filter videos based on restricted keywords in the title or description
-            return self::where(function ($query) use ($restrictedKeywords) {
-                foreach ($restrictedKeywords as $keyword) {
-                    $query->where('title', 'like', '%' . $keyword . '%')
-                          ->orWhere('description', 'like', '%' . $keyword . '%');
-                }
-            });
-        }
-
-        // If no parental control is found, return all videos
-        return self::all();
     }
 }

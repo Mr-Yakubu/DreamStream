@@ -3,25 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User as Authenticatable; // Import the Authenticatable class
-use Illuminate\Notifications\Notifiable; // Import Notifiable trait
+use Illuminate\Foundation\Auth\User as Authenticatable; 
+use Illuminate\Notifications\Notifiable;
+use App\Models\ActivityLog; 
 
-class User extends Authenticatable // Extend Authenticatable instead of Model
+class User extends Authenticatable 
 {
     use Notifiable; // Use Notifiable trait for notifications
 
     protected $fillable = [
-        'username', 'name', 'email', 'password', 'user_type', 'date', // Make these fields mass assignable
+        'username', 'name', 'email', 'password', 'user_type', 'date', 'remember_token', // Mass assignable
     ];
 
     protected $hidden = [
-        'password', 'remember_token', // Hide these fields when serializing
+        'password', 'remember_token', 
     ];
+
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'user_id', 'id');
+    }
 
     public function parent()
 {
     return $this->belongsTo(User::class, 'parent_id');  // A child belongs to a parent
 }
+
+
+
 
 public function parentalControl()
     {

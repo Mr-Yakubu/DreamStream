@@ -141,7 +141,7 @@
 <!-- Centered Message for Non-Content Creators -->
 <div class="container" style="height: 100vh;">
     <div class="d-flex justify-content-start align-items-center" style="height: 100%; margin-left: 20%; position: absolute;">
-        <h2>Sorry, Only Content Creator's Allowed!</h2>
+        <h2>Sorry, Only Content Creators Allowed!</h2>
     </div>
 </div>
 @endif

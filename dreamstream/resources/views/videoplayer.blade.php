@@ -329,13 +329,13 @@
     
     <script>
         function addToFavorites(videoId) {
-            fetch(/favorites/add/${videoId}, {
+            fetch(`/favorites/add/${videoId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({ userId: {{ auth()->user()->id }} }) 
+                body: JSON.stringify({ userId: {{ auth()->user()->id }} })
             })
             .then(response => {
                 if (response.ok) {
@@ -346,41 +346,39 @@
             })
             .catch(error => console.error('Error:', error));
         }
-    
+
         function likeVideo(videoId) {
-            disableButtons(videoId, 'like');
-            fetch(/video/${videoId}/like, {
+            fetch(`/video/${videoId}/like`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById(likes-count-${videoId}).innerText = data.likes;
+                document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
             })
             .catch(error => console.error('Error:', error));
         }
-    
+
         function dislikeVideo(videoId) {
-            disableButtons(videoId, 'dislike');
-            fetch(/video/${videoId}/dislike, {
+            fetch(`/video/${videoId}/dislike`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById(dislikes-count-${videoId}).innerText = data.dislikes;
+                document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
             })
             .catch(error => console.error('Error:', error));
         }
-    
+
         function sendViewCount(videoId) {
-            fetch(/video/${videoId}/view, {
+            fetch(`/video/${videoId}/view`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -396,17 +394,7 @@
             })
             .catch(error => console.error('Error:', error));
         }
-    
-        // Function to disable like and dislike buttons
-        function disableButtons(videoId, action) {
-            if (action === 'like') {
-                document.querySelector(.like-button).disabled = true;
-            } else if (action === 'dislike') {
-                document.querySelector(.dislike-button).disabled = true;
-            }
-        }
-    
-        // Call the sendViewCount function when the video loads
+
         window.onload = function() {
             sendViewCount({{ $video->id }});
         }
@@ -431,7 +419,7 @@
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('settings') }}">
+                <a href="{{ route('profile.picture.form') }}">
                     <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
                 </a>
             </div>

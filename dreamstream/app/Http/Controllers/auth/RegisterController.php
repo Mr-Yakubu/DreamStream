@@ -56,6 +56,9 @@ class RegisterController extends Controller
             throw new \Exception('Invalid user type provided.');
         }
 
+
+        $date_of_birth = $request->input('date_of_birth') ?: '0000-00-00';
+
         // Create a new user and hash the password
         $user = User::create([
             'username' => $data['username'] ?: $defaultUsername, // Use the provided username or the default

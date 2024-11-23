@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\ParentalControl;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\MonitoringLog;
 use FFMpeg\FFMpeg;
 
 class VideoController extends Controller
@@ -28,7 +29,12 @@ class VideoController extends Controller
 
     // Pass these variables to the Blade view
     return view('settings', compact('numOfVideos', 'totalViews', 'totalLikes'));
+
 }
+
+
+
+
 
 
     // Show the list of all videos
@@ -66,6 +72,11 @@ class VideoController extends Controller
         return view('home', compact('videos'));
     }
 
+
+
+
+
+
     // Show the videos uploaded by the logged-in user
     public function showMyVideos()
     {
@@ -79,23 +90,32 @@ class VideoController extends Controller
         return view('video.edit', compact('myVideos')); 
     }
 
+
+
+
     public function showManageVideos()
-{
-    // Ensure the user is logged in
-    if (!auth()->check()) {
-        return redirect()->route('login')->with('error', 'Please log in to view your videos.');
+    {
+        // Check if the user is authenticated
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to manage videos.');
+        }
+
+        // Fetch videos uploaded by the authenticated user
+        $userVideos = Video::where('uploaded_by', auth()->id())->get();
+        dd($userVideos);
+
+        // Handle case where no videos are found
+        if ($userVideos->isEmpty()) {
+            return view('manage-videos', ['message' => 'You have not uploaded any videos yet.']);
+        }
+
+        // Pass the videos to the view
+        return view('manage-videos', compact('userVideos'));
     }
 
-    // Get the logged-in user's ID
-    $userId = auth()->user()->id;
 
-    // Get videos uploaded by the user
-    $videos = Video::where('uploaded_by', $userId)->get();
-    dd($videos);
 
-    // Pass videos to the view
-    return view('manage-videos', compact('videos'));
-}
+
 
     // Show the video player and upcoming videos
     public function show($id)
@@ -117,7 +137,13 @@ class VideoController extends Controller
         $comments = Comment::where('video_id', $id)->get(); 
     
         return view('video-player', compact('video', 'comments'));  // Pass comments (even empty)
+    
     }
+
+
+
+
+
 
     // Search for videos by title
     public function search(Request $request)
@@ -129,6 +155,9 @@ class VideoController extends Controller
         return view('search_results', compact('videos', 'query'));
     }
 
+
+    
+
     // Show the settings page for videos
     public function settings()
     {
@@ -138,6 +167,10 @@ class VideoController extends Controller
         return view('settings', compact('videos'));
     }
 
+
+
+
+
     // Show the popular videos page
     public function popular()
     {
@@ -146,6 +179,8 @@ class VideoController extends Controller
 
         return view('popular', compact('popularVideos'));
     }
+
+
 
     // Generate a thumbnail for a video
     private function generateThumbnail($videoPath)
@@ -159,21 +194,44 @@ class VideoController extends Controller
         return $thumbnailPath;
     }
 
+
+
+
     // Show the edit/upload video page
     public function editUpload()
     {
         return view('videos');
     }
 
+
+
+
     // Like a video
     public function likeVideo($id)
-    {
-        $video = Video::findOrFail($id); 
-        $video->likes++;
-        $video->save(); 
+{
+    // Find the video
+    $video = Video::findOrFail($id); 
 
-        return response()->json(['likes' => $video->likes]); 
+    // Increment the likes count for the video
+    $video->likes++;
+    $video->save(); 
+
+    // Log the activity in the monitoring_logs table
+    $child = auth()->user(); // Get the currently logged-in child user
+    MonitoringLog::create([
+        'action' => 'Liked Video', // Action the user took
+        'details' => 'Liked video with ID: ' . $video->id, // Details about the action
+        'user_id' => $child->id, // The child user who performed the action
+        'timestamp' => now(), // The current timestamp when the action occurred
+    ]);
+
+    // Return the updated likes count as a response
+    return response()->json(['likes' => $video->likes]);
     }
+
+
+
+
 
     // Dislike a video
     public function dislikeVideo($id)
@@ -184,6 +242,9 @@ class VideoController extends Controller
 
         return response()->json(['dislikes' => $video->dislikes]); 
     }
+
+
+
 
     // Increment view count for a video
     public function incrementViewCount($id)

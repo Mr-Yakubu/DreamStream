@@ -25,6 +25,26 @@ class SettingsController extends Controller
         return view('settings');
     }
 
+    public function showManageVideos()
+    {
+        // Check if the user is authenticated
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to manage videos.');
+        }
+
+        // Fetch videos uploaded by the authenticated user
+        $userVideos = Video::where('uploaded_by', auth()->id())->get();
+
+        // Handle case where no videos are found
+        if ($userVideos->isEmpty()) {
+            return view('manage-videos', ['message' => 'You have not uploaded any videos yet.']);
+        }
+
+        // Pass the videos to the view
+        return view('manage-videos', compact('userVideos'));
+    }
+
+
     public function showUserChannelInfo($userId)
 {
     // Retrieve the user based on their ID

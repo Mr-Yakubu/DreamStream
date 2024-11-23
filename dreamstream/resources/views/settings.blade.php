@@ -271,11 +271,15 @@ nav h1 {
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
             <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
                     <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="display: none;"></button>
+                    <button type="submit" style="background: none; border: none;">
+                        <i class="fas fa-search" style="color: black;"></i>
+                    </button>
                 </form>
-                <a href="{{ route('settings') }}"><img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                <a href="{{ route('profile.picture.form') }}">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                </a>
             </div>
         </div>
     </nav>
@@ -587,4 +591,3 @@ nav h1 {
 </script>
 </body>
 </html>
-
