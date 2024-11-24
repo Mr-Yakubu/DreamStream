@@ -66,9 +66,6 @@
                     <div class="d-flex justify-content-center mt-2">
                         <button type="button" class="btn btn-file-custom" onclick="document.getElementById('video_file_input').click();">Choose File</button>
                         <button type="submit" class="btn btn-custom ms-2">{{ isset($video) ? 'Update Video' : 'Upload Video' }}</button>
-                        @if (!isset($video)) <!-- Show only for new video uploads -->
-                            <button type="submit" name="publish" value="1" class="btn btn-custom ms-2">Publish Video</button>
-                        @endif
                     </div>
                 </div>
             </form>

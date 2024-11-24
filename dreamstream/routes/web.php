@@ -19,6 +19,7 @@ use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmailController;
 
 
 
@@ -49,7 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 
-
+// Mail
+Route::post('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail'])->name('send.welcome.email');
 
 // Password Reset routes 
 
@@ -72,7 +74,12 @@ Route::get('/video/{id}', [VideoController::class, 'show'])->name('video.show');
 
 
 // Admin Routes
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Admin dashboard
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/edit-user/{id}', [AdminController::class, 'editUser'])->name('admin.editUser');
+Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
+Route::get('/admin/edit-video/{id}', [AdminController::class, 'editVideo'])->name('admin.editVideo');
+Route::delete('/videos/{id}', [AdminController::class, 'deleteVideo'])->name('admin.deleteVideo');
+
 
 // Settings Routes
 Route::get('/user/account/info', [UserController::class, 'getAccountInfo'])->name('user.account.info');

@@ -71,4 +71,5 @@ class AuthController extends Controller
 
         return redirect()->route('login')->with('success', 'Your password has been reset successfully.');
     }
+
 }

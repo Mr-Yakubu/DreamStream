@@ -72,7 +72,7 @@ class GenerateThumbnails extends Command
     private function generateThumbnail($videoPath)
     {
         // Ensure the video path is consistent with the public directory
-        $fullVideoPath = 'videos/' . $videoPath; // Path relative to the 'public' disk
+        $fullVideoPath = 'videos/videos/' . basename($videoPath);
         $this->info("Full video path: " . $fullVideoPath); // Debugging line to check the path
 
         // Define the thumbnail path based on the video filename

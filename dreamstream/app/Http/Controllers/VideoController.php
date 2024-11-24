@@ -274,7 +274,7 @@ class VideoController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'video_file' => 'required|mimes:mp4,avi,mov|max:20480',
-            'tags' => 'nullable|string|max:500', // We expect a string of tags separated by commas
+            'tags' => 'nullable|string|max:500',
         ]);
     
         try {
@@ -285,6 +285,7 @@ class VideoController extends Controller
                 // Retrieve the user information
                 $user = auth()->user();
                 $uploadedBy = $user->username ?? null;  // Set username if available, otherwise null
+
     
                 // Create the video entry, including the 'uploaded_by' field if it's available
                 $video = Video::create([
@@ -292,9 +293,9 @@ class VideoController extends Controller
                     'description' => $request->input('description'),
                     'file_path' => $filePath,
                     'user_id' => $user->id,
-                    'tags' => $request->input('tags'),  // Store the tags as a comma-separated string
+                    'tags' => $request->input('tags'),  // string 
                     'uploaded_by' => $uploadedBy, // Use username if it's available
-                    'url' => null, // Set URL to null initially
+                    'url' => null, // Set URL to null initially, will be generated later.
                 ]);
     
                 // Generate the URL for the video after upload

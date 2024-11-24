@@ -26,8 +26,8 @@
             padding: 20px;
             text-align: center;
         }
-/* Logo Styling */
-nav h1 {
+        /* Logo Styling */
+        nav h1 {
             font-family: 'Pacifico', cursive;
             font-size: 2.5em;
             font-weight: 700;
@@ -285,29 +285,39 @@ nav h1 {
     </nav>
 
     <div class="main-content">
-        <!-- Sidebar -->
-        <div class="sidebar">
+
+      <!-- Sidebar -->
+    <div class="sidebar">
             <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
             <a href="{{ route('home') }}"><i class="fas fa-clock"></i> Latest</a>
             <a href="{{ route('settings') }}"><i class="fas fa-cog"></i> Settings</a>
-            @if(Auth::user()->user_type == 'parent')
-                            <a href="{{ route('parent_dashboard', ['childUserId' => Auth::user()->id]) }}">
-                            <i class="fas fa-shield-alt"></i> Parental Controls
-                        </a>
-                    @endif
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
+
+         @if(Auth::user()->user_type == 'parent')
+            <a href="{{ route('parent_dashboard', ['childUserId' => Auth::user()->id]) }}">
+            <i class="fas fa-shield-alt"></i> Parental Controls
             </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
+        @endif
+
+        @if(Auth::user()->user_type == 'administrator')
+            <a href="{{ route('admin.dashboard') }}">
+            <i class="fas fa-tachometer-alt"></i> Admin Dashboard
+            </a>
+        @endif
+
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+    </form>
+</div>
+
 
         <!-- Settings Page Content -->
         <div class="settings-container">
             <!-- Settings Header (No Animation here) -->
             <div class="settings-header">
-                <a href="#" class="active">Dashboard</a>
+                <a href="#" class="active">User Dashboard</a>
                 <a href="#">Manage Videos</a>
                 <a href="#">User Activity</a>
             </div>
@@ -459,7 +469,7 @@ nav h1 {
                     link.classList.add('active');
                     
                     // Switch to the corresponding section
-                    if (link.textContent === 'Dashboard') {
+                    if (link.textContent === 'User Dashboard') {
                         switchView(dashboard);
                     } else if (link.textContent === 'Manage Videos') {
                         switchView(manageVideos);
