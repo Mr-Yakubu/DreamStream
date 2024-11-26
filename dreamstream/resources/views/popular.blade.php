@@ -18,7 +18,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow-x: hidden; /* Disable horizontal scrolling */
+            overflow-x: hidden; 
         }
         nav {
             width: 100%;
@@ -32,7 +32,7 @@
             font-size: 2.5em;
             font-weight: 700;
             color: #b8b8b8; /* Green gradient color */
-            background: linear-gradient(45deg, #000000, #000000); /* Gradient effect */
+            background: linear-gradient(45deg, #000000, #000000); 
             -webkit-background-clip: text;
             color: transparent;
             text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
@@ -162,38 +162,40 @@
         .video-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-left: 20px;
-            padding: 20px;
+            gap: 16px;
+            margin-left: 45px;
+            padding: 50px;
             flex-grow: 1;
-            overflow-y: auto; /* Allow vertical scrolling */
+            overflow-y: auto;
         }
+        
         .video-card {
-            border: 1px solid #ccc;
-            background-color: white;
-            border-radius: 20px; /* Adjust border-radius */
-            max-width: 385px;
-            max-height: 250px;
-            position: relative; /* Position for overlay */
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content */
-            align-items: center;
-            text-align: center; /* Center titles */
-            transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
-        }
+                width: 100%;
+                aspect-ratio: 16/9;
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 15px;
+                overflow: hidden;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
+            }
+
+
         .video-card:hover {
             background-color: #f0f0f0;
             transform: scale(1.05);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 100%; /* Fill the entire width */
-            height: 500px; /* Fixed height for thumbnails */
-            object-fit: cover; /* Cover the area */
-            border-radius: 10px 10px 0 0; /* Rounded top corners */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
         }
+
         .play-overlay {
             position: absolute;
             top: 50%;
@@ -208,16 +210,25 @@
             transition: background-color 0.3s;
         }
         .video-card:hover .play-overlay {
-            display: block; /* Show overlay on hover */
+            display: block; 
         }
         .video-card p {
-            margin: 10px 0 0; /* Adjust margin for video title */
+            margin: 10px 0 0; 
         }
         .video-card a {
             text-decoration: none;
             color: black;
             display: block;
         }
+
+        .video-title {
+            margin: 10px 0 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
     </style>
 </head>
 <body>
@@ -227,15 +238,19 @@
             <div><a href="{{ route('home') }}">HOME</a></div>
             <div><a href="{{ route ('favorites.index') }}">FAVORITES</a></div>
             <div><a href="#">CATEGORIES</a></div>
-            <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
+            <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                    <input type="text" name="query" placeholder="Search..." required 
+                           style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                    <button type="submit" 
+                            style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('profile.picture.form') }}">
-                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                <a href="{{ route('profile.picture.form') }}" style="margin-left: 8px; display: flex; align-items: center;">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                         alt="Profile Picture" 
+                         style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; object-fit: cover;">
                 </a>
             </div>
         </div>
@@ -257,13 +272,14 @@
 
         <div class="video-grid">
             @foreach($popularVideos as $video)
+            <div class="video-wrapper">
                 <div class="video-card">
                     <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
                         <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
-                        <div class="play-overlay"><i class="fas fa-play"></i></div>
                     </a>
-                    <p>{{ $video->title }}</p>
                 </div>
+                <p class="video-title">{{ $video->title }}</p>
+            </div>
             @endforeach
         </div>
     </div>

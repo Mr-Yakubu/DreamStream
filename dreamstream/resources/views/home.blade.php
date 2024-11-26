@@ -16,7 +16,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow-x: hidden; /* Disable horizontal scrolling */
+            overflow-x: hidden;
         }
 
         nav {
@@ -26,37 +26,30 @@
             text-align: center;
         }
 
-        /* Logo Styling */
         nav h1 {
             font-family: 'Pacifico', cursive;
             font-size: 2.5em;
             font-weight: 700;
-            color: #b8b8b8; /* Green gradient color */
-            background: linear-gradient(45deg, #000000, #000000); /* Gradient effect */
+            color: #b8b8b8; 
+            background: linear-gradient(45deg, #000000, #000000);
             -webkit-background-clip: text;
             color: transparent;
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3); /* Slight shadow for depth */
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
             animation: slideInLogo 2s ease-out;
         }
 
         @keyframes slideInLogo {
-        from { transform: translateY(-100%); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-        }   
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
         .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 20px;
+            flex-wrap: wrap; /* Make navbar items wrap on smaller screens */
         }
-
-        .navbar .search-bar img {
-            width: 50px; 
-            height: auto; 
-            max-width: 100%; 
-            border-radius: 50%; 
-        }   
 
         .navbar div {
             display: flex;
@@ -66,7 +59,7 @@
         }
 
         .navbar a {
-            margin: 0 20px;
+            margin: 0 10px; /* Reduced margin for better responsiveness */
             font-family: 'Nunito', sans-serif;
             font-weight: 700;
             color: black;
@@ -77,7 +70,7 @@
         }
 
         .navbar a i {
-            margin-right: 8px; /* Space between icon and text */
+            margin-right: 8px;
         }
 
         .navbar a:hover {
@@ -88,6 +81,7 @@
         .search-bar {
             display: flex;
             align-items: center;
+            margin: 10px 0; /* Add margin for smaller screens */
         }
 
         .search-bar input[type="text"] {
@@ -106,28 +100,12 @@
             background-color: white;
         }
 
-        .search-bar button i {
-            font-size: 16px;
-            color: #333;
-        }
-
-        .profile-icon {
-            margin-left: 10px;
-            cursor: pointer;
-        }
-
         .main-content {
             display: flex;
             flex-direction: row;
             margin-top: 20px;
             flex-grow: 1;
         }
-
-        @keyframes slideIn {
-        from { transform: translateX(-100%); }
-        to { transform: translateX(0); }
-        }
-        
 
         .sidebar {
             font-weight: 700;
@@ -136,7 +114,7 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            height: auto; /* Allow sidebar height to adjust automatically */
             animation: slideIn 0.5s ease-out;
         }
 
@@ -161,30 +139,95 @@
         }
 
         .video-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px; /* Reduced spacing between cards */
-        margin-left: 45px; /* Reduced margin */
-        padding: 50px; /* Reduced padding */
-        flex-grow: 1;
-        overflow-y: auto;
-    }
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-left: 45px;
+            padding: 50px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
 
-    .video-card {
-        border: 1px solid #ccc;
-        background-color: white;
-        border-radius: 15px; /* Reduced border radius */
-        max-width: 350px; /* Adjusted size */
-        max-height: 220px; /* Adjusted size */
-        position: relative;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
-    }
+        @media (max-width: 1200px) {
+            .video-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 150px; /* Adjust sidebar width */
+                font-size: 14px; /* Adjust text size */
+            }
+        }
+
+        @media (max-width: 500px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column; /* Stack navbar items */
+            }
+
+            .navbar div {
+                justify-content: center; /* Center items */
+            }
+
+            @media (max-width: 800px) {
+
+            .search-bar {
+                flex-direction: column; /* Stack search bar and profile picture vertically */
+                align-items: center;
+                margin: 10px 0;
+            }
+
+            .search-bar form {
+                width: 100%; /* Full width for smaller screens */
+            }
+
+            .search-bar input[type="text"] {
+                width: 100%; /* Full width input box */
+            }
+
+            .search-bar a img {
+                width: 35px; /* Slightly smaller profile picture for narrow screens */
+                height: 35px;
+            }
+        }
+
+            @media (max-width: 500px) {
+            .search-bar a img {
+                width: 30px; /* Further reduce size for very small screens */
+                height: 30px;
+            }
+        }
+            }
+
+            .video-card {
+                width: 100%;
+                aspect-ratio: 16/9;
+                background-color: white;
+                border: 1px solid #ccc;
+                border-radius: 15px;
+                overflow: hidden;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
+            }
+
+        .video-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
 
         .video-card:hover {
             background-color: #f0f0f0;
@@ -192,39 +235,12 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .video-card img {
-            width: 100%; /* Fill the entire width */
-            height: 500px; /* Fixed height for thumbnails */
-            object-fit: cover; /* Cover the area */
-            border-radius: 10px 10px 0 0; /* Rounded top corners */
-        }
-
-        .play-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 24px;
-            transition: background-color 0.3s;
-        }
-
-        .video-card:hover .play-overlay {
-            display: block; /* Show overlay on hover */
-        }
-
-        .video-card p {
-        margin: 5px 0 0; /* Reduced top margin for video title */
-    }
-
-        .video-card a {
-            text-decoration: none;
-            color: black;
-            display: block;
+        .video-title {
+            margin: 10px 0 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -236,20 +252,25 @@
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="{{ route ('favorites.index') }}">FAVORITES</a></div>
             <div><a href="#">CATEGORIES</a></div>
-            <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
-                        <i class="fas fa-search" style="color: black;"></i>
-                    </button>
-                </form>
-                <a href="{{ route('profile.picture.form') }}">
-                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
-                </a>
-            </div>
-        </div>
+            <div style="display: flex; justify-content: flex-start;">
+                <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+                    <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                        <input type="text" name="query" placeholder="Search..." required 
+                               style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                        <button type="submit" 
+                                style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
+                            <i class="fas fa-search" style="color: black;"></i>
+                        </button>
+                    </form>
+                    <a href="{{ route('profile.picture.form') }}" style="margin-left: 8px; display: flex; align-items: center;">
+                        <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                             alt="Profile Picture" 
+                             style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; object-fit: cover;">
+                    </a>
+                </div>
+            </div>            
+      </div>
     </nav>
-
     <div class="main-content">
         <div class="sidebar">
             <a href="{{ route('channels') }}"><i class="fas fa-th-list"></i> Channels</a>
@@ -263,19 +284,18 @@
                 @csrf
             </form>
         </div>
-
         <div class="video-grid">
             @foreach ($videos as $video)
-                <div class="video-card">
-                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
-                        <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
-                        <div class="play-overlay"><i class="fas fa-play"></i></div>
-                    </a>
-                    <p>{{ $video->title }}</p>
+                <div class="video-wrapper">
+                    <div class="video-card">
+                        <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
+                            <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
+                        </a>
+                    </div>
+                    <p class="video-title">{{ $video->title }}</p>
                 </div>
             @endforeach
         </div>
     </div>
 </body>
 </html>
-

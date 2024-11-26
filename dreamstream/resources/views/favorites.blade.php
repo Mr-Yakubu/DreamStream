@@ -164,75 +164,106 @@
         .video-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 8px; /* Reduced spacing between cards */
-        margin-left: 45px; /* Reduced margin */
-        padding: 50px; /* Reduced padding */
+        gap: 16px; /* Adjust gap for better spacing */
+        margin-left: 45px;
+        padding: 50px;
         flex-grow: 1;
         overflow-y: auto;
     }
 
-    .video-card {
-        border: 1px solid #ccc;
+    @media (max-width: 1200px) {
+        .video-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .video-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 500px) {
+        .video-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+        .video-wrapper {
+            width: 100%;
+            text-align: center;
+        }
+
+        .video-card {
+        width: 100%; /* Match the width of the grid cell */
+        aspect-ratio: 16/9; /* Maintain a consistent aspect ratio */
         background-color: white;
-        border-radius: 15px; /* Reduced border radius */
-        max-width: 350px; /* Adjusted size */
-        max-height: 220px; /* Adjusted size */
-        position: relative;
+        border: 1px solid #ccc;
+        border-radius: 15px;
         overflow: hidden;
+        position: relative;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
-        text-align: center;
         transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
     }
 
-        .video-card:hover {
-            background-color: #f0f0f0;
-            transform: scale(1.05);
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        }
+
         .video-card img {
-            width: 100%; /* Fill the entire width */
-            height: 500px; /* Fixed height for thumbnails */
-            object-fit: cover; /* Cover the area */
-            border-radius: 10px 10px 0 0; /* Rounded top corners */
-        }
-        .play-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none; /* Hidden by default */
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 24px;
-            transition: background-color 0.3s;
-        }
-        .video-card:hover .play-overlay {
-            display: block; /* Show overlay on hover */
-        }
-        .video-card p {
-            margin: 10px 0 0; /* Adjust margin for video title */
-        }
-        .video-card a {
-            text-decoration: none;
-            color: black;
-            display: block;
-        }
-        .remove-btn {
-            background-color: black; /* Black button */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 100px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 10px 10px 0 0;
         }
 
+        .video-card:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .play-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 10px;
+        border-radius: 50%;
+        font-size: 24px;
+        display: none;
+        }
+
+        .video-card:hover .play-overlay {
+        display: block;
+        }
+
+        .video-card p {
+            margin: 10px 0;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .video-title {
+        margin: 10px 0 0;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        word-wrap: break-word;
+        }
+        
+        .remove-btn {
+            margin-top: 5px;
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 0.9rem;
+        }
         .remove-btn:hover {
             background-color: #333333;
             transform: scale(1.05);
@@ -246,15 +277,19 @@
             <div><a href="{{ route('home') }}">HOME</a></div>
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
-            <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
+            <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                    <input type="text" name="query" placeholder="Search..." required 
+                           style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                    <button type="submit" 
+                            style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('profile.picture.form') }}">
-                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                <a href="{{ route('profile.picture.form') }}" style="margin-left: 8px; display: flex; align-items: center;">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                         alt="Profile Picture" 
+                         style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; object-fit: cover;">
                 </a>
             </div>
         </div>
@@ -277,25 +312,24 @@
         <div class="video-grid">
             @if($favorites->isEmpty())
                 <div style="position: absolute; right: 750px; top: 50%; transform: translate(0, -50%); text-align: center;">
-                    <p style="font-size: 1.5rem; color: black;">Please Add Videos To Favorites!</p>
+                    <p style="font-family: 'Nunito', sans-serif; font-size: 1.5rem; color: black;">Please Add Videos To Favorites!</p>
                 </div>
             @else
-                @foreach($favorites as $video)
+                  @foreach($favorites as $video)
+                  <div class="video-wrapper">
                     <div class="video-card">
                         <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
                             <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
-                            <div class="play-overlay"><i class="fas fa-play"></i></div>
                         </a>
-                        <p>{{ $video->title }}</p>
-        
-                        <!-- Remove button -->
                         <form action="{{ route('favorites.remove', ['id' => $video->id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="remove-btn">Remove from Favorites</button>
                         </form>
                     </div>
+                    <p class="video-title">{{ $video->title }}</p>
+                    <button type="submit" class="remove-btn">Remove from Favorites</button>
                 @endforeach
+                  </div>
             @endif
         </div>        
     </div>

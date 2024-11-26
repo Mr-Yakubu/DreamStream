@@ -201,7 +201,7 @@
         }
         /* Account Info Section Styling */
         .account-info, .upload-history {
-            display: none; /* Initially hidden */
+            display: none;
             border: 1px solid #ccc;
             border-radius: 10px;
             padding: 20px;
@@ -215,7 +215,7 @@
             width: calc(100% - 16px);
         }
         #saveButton {
-            background-color: #3f4244; /* Match the theme */
+            background-color: #3f4244; 
             color: white;
             border: none;
             border-radius: 5px;
@@ -224,32 +224,32 @@
             transition: background-color 0.3s, transform 0.3s;
         }
         #saveButton:hover {
-            background-color: #2e3031; /* Darker shade on hover */
+            background-color: #2e3031; 
             transform: scale(1.05);
         }
 
         /* Keyframes for right to left animation */
         @keyframes slideFromRight {
         0% {
-        transform: translateX(100%); /* Start from 100% to the right */
-        opacity: 0; /* Start invisible */
+        transform: translateX(100%); /
+        opacity: 0; 
         }
         100% {
-        transform: translateX(0); /* End at original position */
-        opacity: 1; /* End fully visible */
+        transform: translateX(0); 
+        opacity: 1; 
         }
         }
 
                 /* Apply animation to elements you want to animate */
         .animate-right-to-left {
-            animation: slideFromRight 1s ease-out; /* Duration of 1 second, easing function for smoothness */
+            animation: slideFromRight 1s ease-out; 
         }
 
             /* Optional: Styling for the container or sections */
         .animated-section {
         display: block;
         padding: 20px;
-        background-color: #f0f0f0; /* Light background color */
+        background-color: #f0f0f0; 
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
         margin: 15px 0; /* Spacing between sections */
@@ -257,6 +257,21 @@
 
         .manage-videos, .user-activity {
         display: none; /* Hidden by default */
+        }
+
+        .upload-history {
+            padding: 10px;
+        }
+
+        .video-item {
+             display: flex;
+             align-items: center;
+             margin-bottom: 15px;
+        }
+
+        .video-item img {
+             border-radius: 5px;
+             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
     </style>
@@ -270,15 +285,19 @@
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
-            <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
+            <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                    <input type="text" name="query" placeholder="Search..." required 
+                           style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                    <button type="submit" 
+                            style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('profile.picture.form') }}">
-                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                <a href="{{ route('profile.picture.form') }}" style="margin-left: 8px; display: flex; align-items: center;">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                         alt="Profile Picture" 
+                         style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; object-fit: cover;">
                 </a>
             </div>
         </div>
@@ -315,7 +334,7 @@
 
         <!-- Settings Page Content -->
         <div class="settings-container">
-            <!-- Settings Header (No Animation here) -->
+            <!-- Settings Header -->
             <div class="settings-header">
                 <a href="#" class="active">User Dashboard</a>
                 <a href="#">Manage Videos</a>
@@ -349,7 +368,9 @@
                     <div class="settings-card animated-section animate-right-to-left" id="uploadHistoryCard">
                         Upload History
                         <div class="upload-history" id="uploadHistory">
-                            <div id="uploadList"></div>
+                            <div id="uploadList">
+                                <p>Loading your latest uploads...</p>
+                            </div>
                         </div>
                     </div>
                     <div class="settings-card animated-section animate-right-to-left">
@@ -357,6 +378,41 @@
                     </div>
                 </div>
             </div>
+
+    <script>
+                document.addEventListener('DOMContentLoaded', () => {
+    const uploadList = document.getElementById('uploadList');
+
+    fetch('{{ route('upload.history') }}')
+        .then(response => response.json())
+        .then(videos => {
+            if (videos.length === 0) {
+                uploadList.innerHTML = '<p>No videos uploaded yet.</p>';
+                return;
+            }
+
+            // Clear loading message
+            uploadList.innerHTML = '';
+
+            // Populate with latest videos
+            videos.forEach(video => {
+                const videoItem = document.createElement('div');
+                videoItem.classList.add('video-item');
+                videoItem.innerHTML = `
+                    <div>
+                        <img src="${video.thumbnail}" alt="${video.title}" style="width: 150px; height: auto; margin-right: 10px;">
+                        <p><strong>${video.title}</strong></p>
+                    </div>
+                `;
+                uploadList.appendChild(videoItem);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching upload history:', error);
+            uploadList.innerHTML = '<p>Failed to load videos. Please try again later.</p>';
+        });
+});
+</script>
 
 
 <!------- Fix the Manage Videos Section ------>
@@ -523,7 +579,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Populate upload history
-                    const uploadList = document.getElementById('uploadList');
+                    const uploadList = document.getElementById('user.upload.history');
                     uploadList.innerHTML = '';
                     data.forEach(video => {
                         const videoDiv = document.createElement('div');

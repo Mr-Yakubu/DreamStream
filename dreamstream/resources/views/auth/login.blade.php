@@ -96,13 +96,57 @@
         }
 
         .error-message {
+            font-family: 'Nunito', sans-serif;
             margin-top: 10px; /* Space above the error message */
             color: red; /* Color for error message */
             text-align: center; /* Align error message to center */
         }
+
+        #success-popup {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Nunito', sans-serif;
+        }
+
     </style>
 </head>
 <body>
+
+
+    @if(session('success'))
+    <div id="popup" class="popup">
+        <p>{{ session('success') }}</p>
+    </div>
+    <script>
+        // Show the popup for a limited time
+        setTimeout(() => {
+            const popup = document.getElementById('popup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+        }, 3000); // 3 seconds
+    </script>
+    <style>
+        .popup {
+            position: fixed;
+            top: 20px;
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for true centering */
+            background-color: #4CAF50; /* Success green */
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            z-index: 1000;
+            text-align: center; /* Center the text inside */
+            max-width: 90%; /* Ensure it doesn't overflow on small screens */
+            box-sizing: border-box; /* Include padding in width calculation */
+            font-family: 'Nunito', sans-serif;
+        }
+    </style>
+    @endif
+    
+
     <div class="collage-layout">
         <div class="logo">
             <img src="{{ asset('images/logo.png') }}" alt="DreamStream Logo" style="width: 550px;">
@@ -135,33 +179,5 @@
         </div>
     </div>
 
-    <!-- Role Selection After Registration -->
-    @if (session('registered'))
-        <div class="collage-layout" style="justify-content: center;">
-            <div class="role-form">
-                <h1>Choose Your Role</h1>
-                <form method="POST" action="{{ route('choose.role.submit') }}">
-                    @csrf
-                    <div>
-                        <label for="role">Select Role:</label>
-                        <select name="role" id="role" required>
-                            <option value="parent">Content Creator</option>
-                            <option value="child">Child</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="dob">Date of Birth:</label>
-                        <input type="date" name="dob" id="dob" required>
-                    </div>
-                    <button type="submit">Continue</button>
-                </form>
-                @if ($errors->any())
-                    <div class="error-message">
-                        <strong>{{ $errors->first() }}</strong>
-                    </div>
-                @endif
-            </div>
-        </div>
-    @endif
 </body>
 </html>

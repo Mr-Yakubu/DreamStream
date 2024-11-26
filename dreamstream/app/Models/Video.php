@@ -9,7 +9,7 @@ class Video extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tags', 'title', 'description', 'file_path'];
+    protected $fillable = ['tags', 'title', 'description', 'file_path', 'age_suitability', 'uploaded_by'];
 
     protected $table = 'videos';
 
@@ -53,4 +53,30 @@ class Video extends Model
     {
         $this->attributes['tags'] = implode(', ', (array) $value);  // Convert array to comma-separated string when saving
     }
+
+    private function generateThumbnail($videoPath)
+{
+    // Define the thumbnail path based on video filename
+    $thumbnailPath = 'thumbnails/' . pathinfo($videoPath, PATHINFO_FILENAME) . '.jpg';
+
+    // Define the full paths for video and thumbnail
+    $videoFullPath = storage_path('app/' . $videoPath);
+    $thumbnailFullPath = storage_path('app/' . $thumbnailPath);
+
+    // Check if video file exists before attempting to generate a thumbnail
+    if (!file_exists($videoFullPath)) {
+        throw new \Exception("Video file not found: " . $videoFullPath);
+    }
+
+    // Execute FFmpeg command to create the thumbnail
+    $ffmpegCommand = "ffmpeg -i " . escapeshellarg($videoFullPath) . " -ss 00:00:01.000 -vframes 1 " . escapeshellarg($thumbnailFullPath);
+    exec($ffmpegCommand, $output, $status);
+
+    // Check if the command executed successfully
+    if ($status !== 0) {
+        throw new \Exception("FFmpeg command failed with status $status. Output: " . implode("\n", $output));
+    }
+
+    return $thumbnailPath;
+}
 }

@@ -45,13 +45,13 @@
         }
         input, textarea {
             font-family: 'Nunito', sans-serif;
-            width: 100%; /* Ensure inputs and textareas take the full width */
-            max-width: 500px; /* Optional: limits input field width */
+            width: 100%; 
+            max-width: 500px; 
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin-bottom: 15px; /* Adds space below each input/textarea */
-            display: block; /* Ensures block display for centering and alignment */
+            margin-bottom: 15px; 
+            display: block; 
         }
         button {
             font-family: 'Nunito', sans-serif;
@@ -136,7 +136,7 @@
         <div class="button-container">
             <button type="submit">Update Parental Controls</button>
             <a href="{{ route('home') }}">
-                <button type="button">Done</button> <!-- Redirect to home when Done is clicked -->
+                <button type="button">Done</button> 
             </a>
         </div>
     </form>    

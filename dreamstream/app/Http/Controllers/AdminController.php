@@ -46,6 +46,30 @@ public function editUser($id)
 
 }
 
+public function updateUser(Request $request, $id)
+{
+
+    $user = User::findOrFail($id);
+    $user->email = $request->input('email');
+    $user->user_type = $request->input('user_type');
+    $user->date_of_birth = $request->input('date_of_birth');
+    $user->save();
+
+    // Validate input
+    $validated = $request->validate([
+        'username' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'user_type' => 'required|in:parent,child',
+        'date_of_birth' => 'required|date',
+    ]);
+
+    // Update user data
+    $user->update($validated);
+
+    // Redirect to admin dashboard with success message
+    return redirect()->route('admin.dashboard')->with('success', 'User updated successfully!');
+}
+
 public function editVideo($id)
 {
     $video = Video::findOrFail($id);

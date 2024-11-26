@@ -11,36 +11,27 @@ class ParentalControl extends Model
 
     // Allow mass assignment for these fields
     protected $fillable = [
-        'user_id',        // Make sure user_id is also fillable
+        'user_id',       
         'age_limit',
         'restricted_keywords',
         'time_limits',
     ];
 
     protected $casts = [
-        'restricted_keywords' => 'array', // Automatically cast this field to an array
+        'restricted_keywords' => 'array', 
     ];
 
 
     public function child()
     {
-        return $this->belongsTo(User::class, 'child_user_id'); // Assuming child_user_id is the foreign key for child
+        return $this->belongsTo(User::class, 'child_user_id'); // child_user_id is the foreign key for child
     }
+    
 
-    public function getRestrictedKeywordsAttribute($value)
+    // ParentalControl model
+
+    public function user()
     {
-        return json_decode($value, true); // Decode the JSON stored in the database into an array
-    }
-
-    // In User model
-public function parentalControl()
-{
-    return $this->hasOne(ParentalControl::class, 'child_user_id');
-}
-
-    // In ParentalControl model
-public function user()
-{
     return $this->belongsTo(User::class, 'child_user_id');
-}
+    }
 }

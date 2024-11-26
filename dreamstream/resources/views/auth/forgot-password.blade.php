@@ -66,6 +66,15 @@
             background-color: #45a049;
         }
 
+        .home-btn {
+            margin-top: 15px;
+            background-color: #292929;
+        }
+
+        .home-btn:hover {
+            background-color: #000000;
+        }
+
         .error {
             color: red;
             font-size: 14px;
@@ -77,7 +86,6 @@
             font-size: 14px;
             margin-top: 10px;
         }
-
     </style>
 </head>
 <body>
@@ -98,6 +106,11 @@
             <div class="error">{{ $errors->first() }}</div>
         @endif
     </form>
+
+    <!-- Home button -->
+    <a href="{{ route('login') }}">
+        <button class="home-btn">Home</button>
+    </a>
 </div>
 
 </body>

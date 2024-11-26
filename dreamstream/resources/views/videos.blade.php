@@ -50,14 +50,31 @@
                 <!-- Tags -->
                 <div class="form-group mb-3">
                     <label for="tags">Tags (use commas):</label>
-                    <input type="text" class="form-control" id="tags" name="tags" placeholder="e.g., educational, science, kids">
+                    <input type="text" class="form-control" id="tags" name="tags" placeholder="e.g., educational, kids">
                 </div>
+                
 
                 <!-- Title -->
                 <div class="form-group mb-3">
                     <label for="title">Title:</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ isset($video) ? $video->title : old('title') }}" required>
                 </div>
+
+                <!---- Age ----->
+
+                <div class="form-group mb-3">
+                    <label for="suited_age">Suited Age:</label>
+                    <input 
+                        type="number" 
+                        class="form-control" 
+                        id="suited_age" 
+                        name="suited_age" 
+                        placeholder="Enter suitable age (e.g. 5)" 
+                        min="0" 
+                        value="{{ isset($video) ? $video->age_suitability : old('suited_age') }}" 
+                        required>
+                </div>
+                
 
                 <!-- Upload Video Section -->
                 <div class="form-group text-center mb-4">
@@ -137,7 +154,7 @@
 @else
 <!-- Centered Message for Non-Content Creators -->
 <div class="container" style="height: 100vh;">
-    <div class="d-flex justify-content-start align-items-center" style="height: 100%; margin-left: 20%; position: absolute;">
+    <div class="d-flex justify-content-start align-items-center" style="position: absolute; right: 750px; top: 50%; transform: translate(0, -50%); text-align: center;">
         <h2>Sorry, Only Content Creators Allowed!</h2>
     </div>
 </div>
@@ -161,8 +178,8 @@
 
 <style>
 .video-player video {
-    width: 450px; /* Smaller width */
-    height: 254px; /* Adjusted for smaller preview */
+    width: 450px; 
+    height: 254px; 
     border-radius: 5px; 
 }
 .d-flex {
@@ -186,14 +203,14 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Subtle shadow */
 }
 .btn-custom, .btn-file-custom {
-    background-color: black; /* Black background */
+    background-color: black; 
     color: white; 
     border-radius: 50px; /* Pill-shaped corners */
     padding: 10px 20px; 
     border: none; 
     transition: background-color 0.3s;
     display: inline-flex; 
-    align-items: center; /* Align text vertically in the middle */
+    align-items: center; 
     white-space: nowrap; /* Prevent text wrapping */
     width: 150px;
     margin: 5px;
@@ -211,14 +228,14 @@
     margin-bottom: 2rem !important; 
 }
 .card {
-    border-radius: 10px; /* Rounded corners for video cards */
+    border-radius: 10px; 
     overflow: hidden; /* Prevents overflow of content */
 }
 .card video {
     border-radius: 0; 
 }
 .btn-sm {
-    padding: 5px 10px; /* Adjust padding for smaller buttons */
+    padding: 5px 10px; 
     border-radius: 50px; /* Pill-shaped corners for small buttons */
 }
 .btn-group {
@@ -226,9 +243,9 @@
     gap: 5px; 
 }
 
-/* Top Navigation Bar Style */
+
 .navbar {
-    padding: 0.5rem 1rem; /* Adjust the padding */
+    padding: 0.5rem 1rem; 
 }
 .navbar-nav .nav-link {
     padding: 0.5rem 1rem; 

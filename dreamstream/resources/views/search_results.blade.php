@@ -126,10 +126,74 @@
         .video-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            padding: 20px;
-            width: 80%;
+            gap: 16px;
+            margin-left: 45px;
+            padding: 50px;
+            flex-grow: 1;
+            overflow-y: auto;
         }
+
+        @media (max-width: 1200px) {
+            .video-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .video-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 150px; /* Adjust sidebar width */
+                font-size: 14px; /* Adjust text size */
+            }
+        }
+
+        @media (max-width: 500px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column; /* Stack navbar items */
+            }
+
+            .navbar div {
+                justify-content: center; /* Center items */
+            }
+
+            @media (max-width: 800px) {
+
+            .search-bar {
+                flex-direction: column; /* Stack search bar and profile picture vertically */
+                align-items: center;
+                margin: 10px 0;
+            }
+
+            .search-bar form {
+                width: 100%; /* Full width for smaller screens */
+            }
+
+            .search-bar input[type="text"] {
+                width: 100%; /* Full width input box */
+            }
+
+            .search-bar a img {
+                width: 35px; /* Slightly smaller profile picture for narrow screens */
+                height: 35px;
+            }
+        }
+
+            @media (max-width: 500px) {
+            .search-bar a img {
+                width: 30px; /* Further reduce size for very small screens */
+                height: 30px;
+            }
+        }
+            }
+
+
         .video-card {
             border: 1px solid #ccc;
             background-color: white;
@@ -152,10 +216,11 @@
         }
         .video-card img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
             border-radius: 10px 10px 0 0;
         }
+        
         .play-overlay {
             position: absolute;
             top: 50%;
@@ -180,6 +245,15 @@
             color: black;
             display: block;
         }
+
+        .video-title {
+            margin: 10px 0 0;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            word-wrap: break-word;
+        }
+        
     </style>
 </head>
 <body>
@@ -190,15 +264,19 @@
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="{{ route ('favorites.index') }}">FAVORITES</a></div>
             <div><a href="#">CATEGORIES</a></div>
-            <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
+            <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                    <input type="text" name="query" placeholder="Search..." required 
+                           style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                    <button type="submit" 
+                            style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('profile.picture.form') }}">
-                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                <a href="{{ route('profile.picture.form') }}" style="margin-left: 8px; display: flex; align-items: center;">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                         alt="Profile Picture" 
+                         style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; object-fit: cover;">
                 </a>
             </div>
         </div>
@@ -215,8 +293,8 @@
                         <a href="{{ route('video.player', ['video_id' => $video->id]) }}">
                             <img src="{{ asset('storage/' . $video->thumbnail) }}" alt="{{ $video->title }} Thumbnail">
                             <div class="play-overlay"><i class="fas fa-play"></i></div>
-                            <p>{{ $video->title }}</p>
                         </a>
+                        <p class="video-title">{{ $video->title }}</p>
                     </div>
                 @endforeach
             @endif

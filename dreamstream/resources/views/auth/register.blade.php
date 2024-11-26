@@ -179,7 +179,7 @@
             @endif
 
             <!-- Forgot Password Link -->
-            <a href="#" class="forgot-password">Forgot Password?</a>
+            <a href="{{ route('forgot-password') }}" class="forgot-password">Forgot Password?</a>
         </div>
     </div>
 

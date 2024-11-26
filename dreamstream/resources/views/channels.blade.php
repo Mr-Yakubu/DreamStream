@@ -52,10 +52,10 @@
         }
 
         .navbar .search-bar img {
-            width: 50px; /* Set the desired initial size */
-            height: auto; /* Maintain aspect ratio */
-            max-width: 100%; /* Prevent image from exceeding container width */
-            border-radius: 50%; /* Make it a circle if it's a square image */
+            width: 50px; 
+            height: auto; 
+            max-width: 100%; 
+            border-radius: 50%; 
         }   
 
         .navbar div {
@@ -172,16 +172,16 @@
         .video-card {
             border: 1px solid #ccc;
             background-color: white;
-            border-radius: 20px; /* Adjust border-radius */
+            border-radius: 20px;
             max-width: 385px;
             max-height: 250px;
-            position: relative; /* Position for overlay */
+            position: relative; 
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: center; /* Center content */
             align-items: center;
-            text-align: center; /* Center titles */
+            text-align: center; 
             transition: transform 0.5s, background-color 0.5s, box-shadow 0.5s;
         }
         .video-card:hover {
@@ -190,13 +190,13 @@
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
         .video-card img {
-            width: 100%; /* Fill the entire width */
-            height: 500px; /* Fixed height for thumbnails */
-            object-fit: cover; /* Cover the area */
+            width: 100%; 
+            height: 500px; 
+            object-fit: cover; 
             border-radius: 10px 10px 0 0; /* Rounded top corners */
         }
         .video-card p {
-            margin: 10px 0 0; /* Adjust margin for video title */
+            margin: 10px 0 0; 
         }
         .video-card a {
             text-decoration: none;
@@ -215,17 +215,21 @@
             <div><a href="{{ route('popular') }}">POPULAR</a></div>
             <div><a href="#">CATEGORIES</a></div>
             <div><a href="{{ route('favorites.index') }}">FAVORITES</a></div>
-            <div class="search-bar">
-                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                    <input type="text" name="query" placeholder="Search..." required>
-                    <button type="submit" style="background: none; border: none;">
+            <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+                <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                    <input type="text" name="query" placeholder="Search..." required 
+                           style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                    <button type="submit" 
+                            style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
                         <i class="fas fa-search" style="color: black;"></i>
                     </button>
                 </form>
-                <a href="{{ route('profile.picture.form') }}">
-                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
+                <a href="{{ route('profile.picture.form') }}" style="margin-left: 8px; display: flex; align-items: center;">
+                    <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}" 
+                         alt="Profile Picture" 
+                         style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; object-fit: cover;">
                 </a>
-            </div>            
+            </div>      
         </div>
     </nav>
 
@@ -246,7 +250,7 @@
             @foreach($channels as $channel)
                 <div class="video-card">
                     <a href="{{ route('channel.show', ['id' => $channel->id]) }}">
-                    <p>{{ $channel->username }}</p> <!-- Display the user's name as the channel name -->
+                    <p>{{ $channel->username }}</p> <!-- User's name as the channel name -->
                 </a>
                 </div>
             @endforeach

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+
 use Illuminate\Foundation\Auth\User as Authenticatable; 
 use Illuminate\Notifications\Notifiable;
 use App\Models\ActivityLog; 
@@ -12,7 +12,7 @@ class User extends Authenticatable
     use Notifiable; // Use Notifiable trait for notifications
 
     protected $fillable = [
-        'username', 'name', 'email', 'password', 'user_type', 'date', 'remember_token', // Mass assignable
+        'username', 'name', 'email', 'password', 'user_type', 'date_of_birth',  // Mass assignable
     ];
 
     protected $hidden = [
@@ -38,21 +38,21 @@ public function parentalControl()
         return $this->hasOne(ParentalControl::class, 'user_id'); // Assuming user_id is the foreign key
     }
 
-// For child to parent relationship
-public function parentControl()
-{
+        // For child to parent relationship
+        public function parentControl()
+    {
     return $this->hasOne(ParentalControl::class, 'child_user_id');
-}
+    }
 
 
-public function children()
-{
+    public function children()
+    {
     return $this->hasMany(ParentalControl::class, 'parent_id');  // A parent can have multiple children
-}
+    }
 
     public function videos()
     {
-        return $this->hasMany(Video::class, 'uploaded_by'); // Reference the uploaded_by column
+        return $this->hasMany(Video::class, 'uploaded_by'); // References the uploaded_by column
     }
 
     public function logs()
@@ -71,8 +71,9 @@ public function children()
     }
 
     // Additional method for password verification
+
     public function getAuthPassword()
     {
-        return $this->password; // This is used for authentication
+        return $this->password;
     }
 }

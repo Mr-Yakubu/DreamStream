@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeEmail; // Import the WelcomeEmail Mailable
 
 class RegisterController extends Controller
 {
@@ -26,15 +28,21 @@ class RegisterController extends Controller
         // Create a new user and check if parent email exists
         $user = $this->create($request->all(), $defaultUsername, $request->parent_email);
 
+        // Send a welcome email
+        $this->sendWelcomeEmail($user);
+
         // Log the user in
         auth()->login($user);
 
         // Set session variable for role selection
         session(['registered' => true]);
 
+         // Flash a success message to the session
+        session()->flash('success', 'Registration successful! Please log in.');
+
         // Redirect to the choose role page
-        return redirect()->route('choose.role'); // Adjust to the route for choosing a role
-    }
+        return redirect()->route('login');
+        }
 
     protected function validator(array $data)
     {
@@ -55,7 +63,6 @@ class RegisterController extends Controller
         if (!in_array($data['user_type'], ['parent', 'child', 'content creator'])) {
             throw new \Exception('Invalid user type provided.');
         }
-
 
         // Create a new user and hash the password
         $user = User::create([
@@ -100,5 +107,17 @@ class RegisterController extends Controller
         }
 
         return $newUsername;
+    }
+
+    private function sendWelcomeEmail($user)
+    {
+        // Define the welcome email details
+        $username = $user->username;
+        $email = $user->email;
+        $subject = "Welcome to DreamStream!";
+        $messageBody = "We are thrilled to have you onboard, $username! Explore educational videos tailored just for you.";
+
+        // Send the email
+        Mail::to($email)->send(new WelcomeEmail($username, $subject, $messageBody));
     }
 }

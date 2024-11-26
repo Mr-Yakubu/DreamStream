@@ -86,7 +86,8 @@
 
         .search-bar {
             display: flex;
-            align-items: auto;
+            align-items: center;
+            margin: 10px 0; 
         }
 
         .search-bar input[type="text"] {
@@ -171,6 +172,7 @@
         /* Video grid styling */
         .video-grid {
             display: grid;
+            font-family: 'Nunito', sans-serif; 
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             padding: 20px;
@@ -198,16 +200,15 @@
             <a href="{{ route('popular') }}">POPULAR</a>
             <a href="#">CATEGORIES</a>
         </div>
-        <div class="search-bar">
-            <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center;">
-                <input type="text" name="query" placeholder="Search..." required>
-                <button type="submit" style="background: none; border: none;">
+        <div class="search-bar" style="display: flex; align-items: center; max-width: 300px;">
+            <form action="{{ route('search') }}" method="GET" style="display: flex; align-items: center; flex-grow: 1;">
+                <input type="text" name="query" placeholder="Search..." required 
+                       style="flex: 1; padding: 2px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; height: 25px;">
+                <button type="submit" 
+                        style="background: none; border: none; padding: 4px; font-size: 14px; border-radius: 0 4px 4px 0; cursor: pointer; height: 30px;">
                     <i class="fas fa-search" style="color: black;"></i>
                 </button>
             </form>
-            <a href="{{ route('profile.picture.form') }}">
-                <img src="{{ asset('images/profiles/' . (session('profile_picture') ?? 'default.png')) }}">
-            </a>
         </div>
     </nav>
 

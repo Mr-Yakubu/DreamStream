@@ -32,7 +32,7 @@
             background-color: #fff;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
         }
 
@@ -114,9 +114,9 @@
     <h1>Admin Dashboard</h1>
 
     <!-- Home Button -->
-<a href="{{ route('home') }}" class="home-button">
-    <i class="fas fa-home"></i> Home
-</a>
+    <a href="{{ route('home') }}" class="home-button">
+        <i class="fas fa-home"></i> Home
+    </a>
 
     <!-- Manage Users Section -->
     <div class="dashboard-section">
@@ -143,8 +143,8 @@
             <div class="item">
                 <span class="item-name">{{ $video->title }}</span>
                 <div class="item-controls">
-                    <a href="{{ route('admin.editVideo', ['id' => $video->id]) }}" class="action-button">
-                        <i class="fas fa-edit"></i> Edit
+                    <a href="{{ route('video.player', ['video_id' => $video->id]) }}" class="action-button">
+                        <i class="fas fa-play"></i> View
                     </a>
                     <button class="action-button delete" onclick="openDeleteModal('{{ $video->id }}', 'videos')">
                         <i class="fas fa-trash-alt"></i> Delete
@@ -155,87 +155,87 @@
     </div>
 
     <!-- Delete Modal -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content">
-        <h3>Delete Confirmation</h3>
-        <p>Are you sure you want to delete this item?</p>
-        <div class="modal-buttons">
-            <button class="action-button" onclick="closeModal()">Cancel</button>
-            <form id="deleteForm" method="POST" action="">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="action-button delete">Confirm</button>
-            </form>
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>Delete Confirmation</h3>
+            <p>Are you sure you want to delete this item?</p>
+            <div class="modal-buttons">
+                <button class="action-button" onclick="closeModal()">Cancel</button>
+                <form id="deleteForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="action-button delete">Confirm</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<style>
-    /* Modal Overlay */
-    .modal {
-        display: none; /* Hidden by default */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
+    <style>
+        /* Modal Overlay */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
 
-    /* Modal Content */
-    .modal-content {
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        text-align: center;
-        width: 90%;
-        max-width: 400px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
+        /* Modal Content */
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Modal Buttons */
-    .modal-buttons {
-        margin-top: 20px;
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-    }
+        /* Modal Buttons */
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
 
-    .action-button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-    }
+        .action-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-    .action-button.delete {
-        background-color: #e74c3c;
-        color: #fff;
-    }
+        .action-button.delete {
+            background-color: #e74c3c;
+            color: #fff;
+        }
 
-    .action-button:hover {
-        opacity: 0.9;
-    }
-</style>
+        .action-button:hover {
+            opacity: 0.9;
+        }
+    </style>
 
-<script>
-    // Function to open the modal
-    function openDeleteModal(id, type) {
-        const form = document.getElementById('deleteForm');
-        form.action = `/${type}/${id}`; // Update form action dynamically
-        const modal = document.getElementById('deleteModal');
-        modal.style.display = 'flex'; // Center modal using flex display
-    }
+    <script>
+        // Function to open the modal
+        function openDeleteModal(id, type) {
+            const form = document.getElementById('deleteForm');
+            form.action = `/${type}/${id}`; // Update form action dynamically
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'flex'; // Center modal using flex display
+        }
 
-    // Function to close the modal
-    function closeModal() {
-        const modal = document.getElementById('deleteModal');
-        modal.style.display = 'none'; // Hide the modal
-    }
-</script>
+        // Function to close the modal
+        function closeModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'none'; // Hide the modal
+        }
+    </script>
 </body>
 </html>

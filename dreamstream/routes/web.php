@@ -42,8 +42,10 @@ Route::post('/login', [LoginController::class, 'login']);
 // Registration Routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
-Route::get('/choose-role', [RoleSelectionController::class, 'showRoleSelectionForm'])->name('choose.role');
-Route::post('/choose-role', [RoleSelectionController::class, 'chooseRoleSubmit'])->name('choose.role.submit');
+
+Route::get('/landing-page', function () {
+    return view('landing-page');
+})->name('landing-page');
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
@@ -55,10 +57,21 @@ Route::post('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail'])
 
 // Password Reset routes 
 
+// Show Forgot Password Form
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot-password');
+
+// Handle Forgot Password Submission
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot-password.submit');
+
+// Show Reset Password Form
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('reset-password');
+
+// Handle Reset Password Submission
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('reset-password.submit');
+
+
+
+
 
 // Logout Route
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -79,6 +92,9 @@ Route::get('/admin/edit-user/{id}', [AdminController::class, 'editUser'])->name(
 Route::delete('/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.deleteUser');
 Route::get('/admin/edit-video/{id}', [AdminController::class, 'editVideo'])->name('admin.editVideo');
 Route::delete('/videos/{id}', [AdminController::class, 'deleteVideo'])->name('admin.deleteVideo');
+Route::put('/admin/update-user/{id}', [AdminController::class, 'updateUser'])->name('admin.updateUser');
+Route::put('/admin/users/{user}', [AdminController::class, 'updateUser'])->name('admin.updateUser');
+
 
 
 // Settings Routes
@@ -117,6 +133,8 @@ Route::get('/parent/child/{childUserId}/performance-report', [ParentalControlCon
 // Upload History
 
 Route::get('/user/upload/history', [UserController::class, 'getUploadHistory'])->name('user.upload.history');
+Route::get('/user/upload-history', [UserController::class, 'getUploadHistory'])->name('upload.history');
+
 
 // Fix video upload!!!!! 
 
@@ -135,6 +153,7 @@ Route::post('/video/{video}/like', [VideoController::class, 'likeVideo']);
 Route::post('/video/{video}/dislike', [VideoController::class, 'dislikeVideo']);
 Route::post('/video/{id}/view', [VideoController::class, 'incrementViewCount']);
 Route::delete('/favorites/remove/{id}', [FavoritesController::class, 'remove'])->name('favorites.remove');
+
 
 // Videos - Store
 Route::post('/videos/videos', [VideoController::class, 'store'])->name('video.store');
